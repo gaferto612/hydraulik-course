@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formelsamling · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/module.css">
+<style>
+  .form-page { max-width: 1000px; margin: 0 auto; padding: 4rem 2rem; }
+  .form-search { width: 100%; padding: 1rem 1.2rem; font-size: 1.1rem; font-family: var(--font-body); border: 2px solid var(--concrete); border-radius: var(--radius); margin: 2rem 0; background: var(--white); }
+  .form-search:focus { border-color: var(--oil); outline: none; }
+  .form-cat { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil); margin: 2rem 0 1rem 0; padding-bottom: 0.5rem; border-bottom: 1px solid var(--concrete); }
+  .formula { background: var(--white); border: var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1rem; transition: all 0.2s; }
+  .formula:hover { border-color: var(--oil); }
+  .formula h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .formula-eq { font-family: var(--font-mono); font-size: 1.3rem; background: var(--bone); padding: 1rem 1.2rem; border-radius: var(--radius); margin: 0.8rem 0; color: var(--ink); }
+  .formula-vars { font-size: 0.9rem; color: var(--steel); line-height: 1.8; }
+  .formula-vars b { color: var(--ink); font-family: var(--font-mono); }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="../quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<div class="form-page">
+  <div class="module-breadcrumb">
+    <a href="../index.html">Hjem</a> <span>/</span> <span data-da="Formelsamling" data-en="Formula reference">Formelsamling</span>
+  </div>
+  <h1 style="font-family: var(--font-display); font-size: 3rem; font-weight: 900; margin-bottom: 1rem;"
+      data-da="Formelsamling" data-en="Formula reference">Formelsamling</h1>
+  <p style="font-size: 1.1rem; color: var(--steel);"
+     data-da="Alle vigtige hydraulikformler samlet ét sted. Søg eller bladr."
+     data-en="All important hydraulic formulas in one place. Search or browse.">
+    Alle vigtige hydraulikformler samlet ét sted. Søg eller bladr.
+  </p>
+
+  <input type="text" class="form-search" id="searchBox"
+         data-da-placeholder="Søg: kraft, tryk, flow, effekt, viskositet..."
+         data-en-placeholder="Search: force, pressure, flow, power, viscosity..."
+         placeholder="Søg: kraft, tryk, flow, effekt, viskositet...">
+
+  <div id="formulasList"></div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script>
+const formulas = [
+  // Tryk og kraft
+  { cat: { da: 'Tryk & kraft', en: 'Pressure & force' }, keywords: 'tryk pressure pascal pression',
+    name: { da: 'Tryk (Pascal)', en: 'Pressure (Pascal)' }, eq: 'p = F / A',
+    vars: { da: '<b>p</b> = tryk (N/m² = Pa, eller bar)<br><b>F</b> = kraft (N)<br><b>A</b> = areal (m²)<br>1 bar ≈ 10 N/cm² ≈ 100 000 Pa', en: '<b>p</b> = pressure (N/m² = Pa, or bar)<br><b>F</b> = force (N)<br><b>A</b> = area (m²)<br>1 bar ≈ 10 N/cm² ≈ 100 000 Pa' } },
+  { cat: { da: 'Tryk & kraft', en: 'Pressure & force' }, keywords: 'kraft force cylinder amplification',
+    name: { da: 'Cylinderkraft', en: 'Cylinder force' }, eq: 'F = p · A',
+    vars: { da: '<b>F</b> = kraft (N)<br><b>p</b> = tryk (N/cm² eller bar)<br><b>A</b> = stempelareal (cm²)<br>Husk: brug stang-areal når cylinderen trækker', en: '<b>F</b> = force (N)<br><b>p</b> = pressure (N/cm² or bar)<br><b>A</b> = piston area (cm²)<br>Note: use rod-side area when retracting' } },
+  { cat: { da: 'Tryk & kraft', en: 'Pressure & force' }, keywords: 'kraftforøgelse pascal amplification mechanical advantage',
+    name: { da: 'Hydraulisk kraftforøgelse', en: 'Hydraulic force amplification' }, eq: 'F₂ = F₁ · A₂ / A₁',
+    vars: { da: '<b>F₁, A₁</b> = lille stempel<br><b>F₂, A₂</b> = stort stempel<br>Pascals lov i praksis', en: '<b>F₁, A₁</b> = small piston<br><b>F₂, A₂</b> = large piston<br>Pascal\'s law in practice' } },
+  { cat: { da: 'Tryk & kraft', en: 'Pressure & force' }, keywords: 'højdetryk pressure height hydrostatic',
+    name: { da: 'Tryk fra højde', en: 'Static head pressure' }, eq: 'p = h · ρ · g',
+    vars: { da: '<b>p</b> = tryk (Pa)<br><b>h</b> = højde (m)<br><b>ρ</b> = densitet (~880 kg/m³ for olie)<br><b>g</b> = 9,81 m/s²', en: '<b>p</b> = pressure (Pa)<br><b>h</b> = height (m)<br><b>ρ</b> = density (~880 kg/m³ for oil)<br><b>g</b> = 9.81 m/s²' } },
+
+  // Flow og hastighed
+  { cat: { da: 'Flow & hastighed', en: 'Flow & velocity' }, keywords: 'flow strom oliestrøm volume flow rate',
+    name: { da: 'Oliestrøm (volumenstrøm)', en: 'Volume flow rate' }, eq: 'Q = v · A = V / t',
+    vars: { da: '<b>Q</b> = oliestrøm (l/min eller m³/s)<br><b>v</b> = hastighed (m/s)<br><b>A</b> = areal (m² eller cm²)<br><b>V</b> = volumen, <b>t</b> = tid', en: '<b>Q</b> = flow rate (l/min or m³/s)<br><b>v</b> = velocity (m/s)<br><b>A</b> = area (m² or cm²)<br><b>V</b> = volume, <b>t</b> = time' } },
+  { cat: { da: 'Flow & hastighed', en: 'Flow & velocity' }, keywords: 'stempelhastighed piston velocity',
+    name: { da: 'Stempelhastighed', en: 'Piston velocity' }, eq: 'v = Q / A',
+    vars: { da: '<b>v</b> = stempelhastighed (m/s)<br><b>Q</b> = oliestrøm (l/min ÷ 60 → l/s, ÷ 1000 → m³/s)<br><b>A</b> = stempelareal (m²)', en: '<b>v</b> = piston velocity (m/s)<br><b>Q</b> = flow (l/min ÷ 60 → l/s, ÷ 1000 → m³/s)<br><b>A</b> = piston area (m²)' } },
+  { cat: { da: 'Flow & hastighed', en: 'Flow & velocity' }, keywords: 'rørdiameter pipe diameter sizing',
+    name: { da: 'Rørdiameter', en: 'Pipe diameter' }, eq: 'd = √(4·Q / (π·v))',
+    vars: { da: '<b>d</b> = indvendig diameter (m)<br><b>Q</b> = oliestrøm (m³/s)<br><b>v</b> = ønsket oliehastighed:<br>· Sugerør: 0,6–1,5 m/s<br>· Trykrør: 2–6 m/s', en: '<b>d</b> = inner diameter (m)<br><b>Q</b> = flow (m³/s)<br><b>v</b> = desired velocity:<br>· Suction: 0.6–1.5 m/s<br>· Pressure: 2–6 m/s' } },
+  { cat: { da: 'Flow & hastighed', en: 'Flow & velocity' }, keywords: 'reynolds laminar turbulent',
+    name: { da: 'Reynolds tal', en: 'Reynolds number' }, eq: 'Re = v · d / ν',
+    vars: { da: '<b>Re</b> < 2300 → laminar<br><b>Re</b> > 4000 → turbulent<br><b>v</b> = hastighed (m/s)<br><b>d</b> = diameter (m)<br><b>ν</b> = kinematisk viskositet (m²/s)', en: '<b>Re</b> < 2300 → laminar<br><b>Re</b> > 4000 → turbulent<br><b>v</b> = velocity (m/s)<br><b>d</b> = diameter (m)<br><b>ν</b> = kinematic viscosity (m²/s)' } },
+
+  // Effekt
+  { cat: { da: 'Effekt & moment', en: 'Power & torque' }, keywords: 'effekt power hydraulisk hydraulic',
+    name: { da: 'Hydraulisk effekt', en: 'Hydraulic power' }, eq: 'P = p · Q / 600',
+    vars: { da: '<b>P</b> = effekt (kW)<br><b>p</b> = tryk (bar)<br><b>Q</b> = oliestrøm (l/min)<br>Faktor 600 inkluderer enhedsomregning', en: '<b>P</b> = power (kW)<br><b>p</b> = pressure (bar)<br><b>Q</b> = flow (l/min)<br>Factor 600 includes unit conversion' } },
+  { cat: { da: 'Effekt & moment', en: 'Power & torque' }, keywords: 'moment torque motor',
+    name: { da: 'Hydraulisk motormoment', en: 'Hydraulic motor torque' }, eq: 'M = (p · V) / (2π)',
+    vars: { da: '<b>M</b> = moment (Nm)<br><b>p</b> = trykdifference (Pa)<br><b>V</b> = slagvolumen (m³/omdr.)<br>η_hm = hydraulisk-mekanisk virkningsgrad (typisk 0,9-0,95)', en: '<b>M</b> = torque (Nm)<br><b>p</b> = pressure differential (Pa)<br><b>V</b> = displacement (m³/rev)<br>η_hm = hydraulic-mechanical efficiency (typically 0.9-0.95)' } },
+  { cat: { da: 'Effekt & moment', en: 'Power & torque' }, keywords: 'omdrejningstal motor speed rpm',
+    name: { da: 'Motoromdrejningstal', en: 'Motor speed' }, eq: 'n = Q / V',
+    vars: { da: '<b>n</b> = omdrejningstal (omdr./min)<br><b>Q</b> = oliestrøm (l/min)<br><b>V</b> = slagvolumen (l/omdr.)', en: '<b>n</b> = rotational speed (rpm)<br><b>Q</b> = flow (l/min)<br><b>V</b> = displacement (l/rev)' } },
+
+  // Viskositet
+  { cat: { da: 'Viskositet & olie', en: 'Viscosity & oil' }, keywords: 'viskositet viscosity kinematic',
+    name: { da: 'Kinematisk viskositet', en: 'Kinematic viscosity' }, eq: 'ν = η / ρ',
+    vars: { da: '<b>ν</b> = kinematisk viskositet (mm²/s = cSt)<br><b>η</b> = dynamisk viskositet (Pa·s)<br><b>ρ</b> = densitet (kg/m³)<br>ISO VG-tal angiver viskositet ved 40°C', en: '<b>ν</b> = kinematic viscosity (mm²/s = cSt)<br><b>η</b> = dynamic viscosity (Pa·s)<br><b>ρ</b> = density (kg/m³)<br>ISO VG number = viscosity at 40°C' } },
+
+  // Filtre
+  { cat: { da: 'Filtre & olierenhed', en: 'Filters & oil cleanliness' }, keywords: 'beta filter filtration ratio',
+    name: { da: 'Beta-værdi (filtrering)', en: 'Beta ratio (filtration)' }, eq: 'β_x = N_før / N_efter',
+    vars: { da: '<b>β_x</b> = beta-værdi ved partikelstørrelse x μm<br><b>N_før</b> = antal partikler større end x μm før<br><b>N_efter</b> = antal partikler større end x μm efter<br>β₁₀=75 betyder 74/75 partikler tilbageholdes', en: '<b>β_x</b> = beta ratio at particle size x μm<br><b>N_before</b> = particles > x μm before<br><b>N_after</b> = particles > x μm after<br>β₁₀=75 means 74/75 particles captured' } },
+
+  // Tank
+  { cat: { da: 'Tank & dimensionering', en: 'Tank & sizing' }, keywords: 'tank volume reservoir sizing',
+    name: { da: 'Tankstørrelse', en: 'Tank size' }, eq: 'V_tank = k · Q_pumpe',
+    vars: { da: '<b>V_tank</b> = tankvolumen (liter)<br><b>Q_pumpe</b> = pumpekapacitet (l/min)<br><b>k</b> = faktor:<br>· Stationær: 3-5<br>· Mobil: 0,5-1,5<br>· Skib: 2-3', en: '<b>V_tank</b> = tank volume (liters)<br><b>Q_pump</b> = pump capacity (l/min)<br><b>k</b> = factor:<br>· Stationary: 3-5<br>· Mobile: 0.5-1.5<br>· Marine: 2-3' } },
+];
+
+function render(filter = '') {
+  const lang = (window.HydraulikI18n && window.HydraulikI18n.getLang()) || 'da';
+  const list = document.getElementById('formulasList');
+  list.innerHTML = '';
+  const f = filter.toLowerCase().trim();
+  const byCategory = {};
+  formulas.forEach(formula => {
+    const matches = !f ||
+      formula.keywords.toLowerCase().includes(f) ||
+      formula.name.da.toLowerCase().includes(f) ||
+      formula.name.en.toLowerCase().includes(f) ||
+      formula.eq.toLowerCase().includes(f);
+    if (!matches) return;
+    const cat = formula.cat[lang];
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(formula);
+  });
+  Object.entries(byCategory).forEach(([cat, items]) => {
+    const h = document.createElement('h3'); h.className = 'form-cat'; h.textContent = cat;
+    list.appendChild(h);
+    items.forEach(formula => {
+      const div = document.createElement('div');
+      div.className = 'formula';
+      div.innerHTML = `
+        <h3>${formula.name[lang]}</h3>
+        <div class="formula-eq">${formula.eq}</div>
+        <div class="formula-vars">${formula.vars[lang]}</div>
+      `;
+      list.appendChild(div);
+    });
+  });
+  if (list.innerHTML === '') {
+    list.innerHTML = '<p style="color:var(--steel);padding:2rem;text-align:center;">Ingen formler matchede søgningen / No formulas matched.</p>';
+  }
+}
+
+document.getElementById('searchBox').addEventListener('input', e => render(e.target.value));
+render();
+if (window.HydraulikI18n && window.HydraulikI18n.onChange) {
+  window.HydraulikI18n.onChange(() => render(document.getElementById('searchBox').value));
+}
+</script>
+</body>
+</html>

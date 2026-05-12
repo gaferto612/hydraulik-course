@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul 1: Grundlæggende hydraulik · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/module.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html#moduler" data-da="Alle moduler" data-en="All modules">Alle moduler</a>
+    <a href="../../interactive/calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="../../interactive/animations.html" data-da="Animationer" data-en="Animations">Animationer</a>
+    <a href="../../interactive/circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="../../quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<header class="module-hero">
+  <div class="module-hero-inner">
+    <div class="module-breadcrumb">
+      <a href="../../index.html" data-da="Hjem" data-en="Home">Hjem</a>
+      <span>/</span>
+      <span data-da="Modul 01" data-en="Module 01">Modul 01</span>
+    </div>
+    <h1 class="module-title" data-da="Grundlæggende hydraulik" data-en="Hydraulics fundamentals">Grundlæggende hydraulik</h1>
+    <p class="module-lead"
+       data-da="Forstå hvorfor hydraulik virker — fra Pascals lov til hvordan en donkraft løfter en bil med fingrekraft."
+       data-en="Understand why hydraulics works — from Pascal's law to how a jack lifts a car with finger-power.">
+      Forstå hvorfor hydraulik virker — fra Pascals lov til hvordan en donkraft løfter en bil med fingrekraft.
+    </p>
+    <div class="module-info">
+      <div class="info-item"><b>⏱</b> <span data-da="2 timer" data-en="2 hours">2 timer</span></div>
+      <div class="info-item"><b>⭐</b> <span data-da="Begynder" data-en="Beginner">Begynder</span></div>
+      <div class="info-item"><b>📚</b> <span data-da="5 lektioner" data-en="5 lessons">5 lektioner</span></div>
+      <div class="info-item"><b>❓</b> <span data-da="10 spørgsmål" data-en="10 questions">10 spørgsmål</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="module-content">
+
+  <aside class="module-toc">
+    <h4 data-da="I dette modul" data-en="In this module">I dette modul</h4>
+    <ol>
+      <li><a href="#lesson-1" data-da="Hydraulikkens historie" data-en="History of hydraulics">Hydraulikkens historie</a></li>
+      <li><a href="#lesson-2" data-da="Væskers egenskaber" data-en="Fluid properties">Væskers egenskaber</a></li>
+      <li><a href="#lesson-3" data-da="Pascals lov" data-en="Pascal's law">Pascals lov</a></li>
+      <li><a href="#lesson-4" data-da="Hydraulisk kraftforøgelse" data-en="Force amplification">Hydraulisk kraftforøgelse</a></li>
+      <li><a href="#lesson-5" data-da="Strømningsformer" data-en="Flow types">Strømningsformer</a></li>
+      <li><a href="#quiz-section" data-da="Quiz" data-en="Quiz">Quiz</a></li>
+    </ol>
+  </aside>
+
+  <article>
+
+    <!-- LESSON 1 -->
+    <section id="lesson-1" class="lesson">
+      <div class="lesson-num" data-da="Lektion 1 · 10 min" data-en="Lesson 1 · 10 min">Lektion 1 · 10 min</div>
+      <h2 data-da="Hydraulikkens historie" data-en="History of hydraulics">Hydraulikkens historie</h2>
+      <p class="lesson-intro"
+         data-da='Hvor kommer ordet "hydraulik" fra? Hvorfor bruger en gravko olie i stedet for el-motorer? Vi starter med en kort rejse fra det antikke Grækenland til moderne danske vandhydrauliske systemer.'
+         data-en='Where does the word "hydraulics" come from? Why does an excavator use oil instead of electric motors? We start with a short journey from ancient Greece to modern Danish water-hydraulic systems.'>
+        Hvor kommer ordet "hydraulik" fra?
+      </p>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year" data-da="Antikken" data-en="Antiquity">Antikken</div>
+          <p data-da='Ordet <em>hydraulik</em> stammer fra det græske "hydor" — vand. Det betød oprindeligt alle lovmæssigheder ved mediet vand.'
+             data-en='The word <em>hydraulics</em> comes from the Greek "hydor" — water. It originally meant all the laws governing water as a medium.'>
+            Ordet <em>hydraulik</em> stammer fra det græske "hydor" — vand.
+          </p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">~1900</div>
+          <p data-da="I Europa drives drejebroer stadig af <strong>vandhydraulik</strong> — nogle har kørt i over 100 år."
+             data-en="In Europe, swing bridges are still powered by <strong>water hydraulics</strong> — some have been running for over 100 years.">
+            I Europa drives drejebroer stadig af <strong>vandhydraulik</strong>.
+          </p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1906</div>
+          <p data-da="<strong>Janney</strong> bygger det første oliehydrauliske system — en hydrostatisk transmission."
+             data-en="<strong>Janney</strong> builds the first oil hydraulic system — a hydrostatic transmission.">
+            <strong>Janney</strong> bygger det første oliehydrauliske system.
+          </p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1922</div>
+          <p data-da="<strong>Hans Thoma</strong> udvikler den første variable hydraulikpumpe (vippehoved-aksialstempel)."
+             data-en="<strong>Hans Thoma</strong> develops the first variable hydraulic pump (swashplate axial piston).">
+            <strong>Hans Thoma</strong> udvikler den første variable hydraulikpumpe.
+          </p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">1930</div>
+          <p data-da="<strong>Harry Vickers</strong> opfinder den pilotstyrede trykaflastningsventil."
+             data-en="<strong>Harry Vickers</strong> invents the pilot-operated pressure relief valve.">
+            <strong>Harry Vickers</strong> opfinder den pilotstyrede trykaflastningsventil.
+          </p>
+        </div>
+        <div class="timeline-item highlight">
+          <div class="timeline-year">1994</div>
+          <p data-da="🇩🇰 Et <strong>dansk selskab</strong> (Danfoss) lancerer vandhydrauliske systemer der bruger almindeligt vandhanevand som drivmiddel — særligt velegnet til levnedsmiddelindustrien."
+             data-en="🇩🇰 A <strong>Danish company</strong> (Danfoss) launches water hydraulic systems using ordinary tap water as the working fluid — particularly suited for the food industry.">
+            🇩🇰 Et <strong>dansk selskab</strong> (Danfoss) lancerer vandhydrauliske systemer.
+          </p>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year" data-da="I dag" data-en="Today">I dag</div>
+          <p data-da="Hydraulik findes overalt: mobilhydraulik (traktorer, trucks), industrihydraulik (presser, plastmaskiner), skibshydraulik (bovporte, kraner), og energihydraulik (vindmøller)."
+             data-en="Hydraulics is everywhere: mobile (tractors, trucks), industrial (presses, plastics machines), marine (bow doors, cranes), and energy (wind turbines).">
+            Hydraulik findes overalt.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <b data-da="💡 Vidste du?" data-en="💡 Did you know?">💡 Vidste du?</b>
+        <span data-da="Et 15 kW el-motor vejer ca. 100 kg. En tilsvarende hydraulisk motor vejer kun 12 kg. Det er derfor maskiner med høje krav til kraft-per-vægt næsten altid bruger hydraulik."
+              data-en="A 15 kW electric motor weighs about 100 kg. An equivalent hydraulic motor weighs only 12 kg. That's why machines needing high power-to-weight almost always use hydraulics.">
+          Et 15 kW el-motor vejer ca. 100 kg. En tilsvarende hydraulisk motor vejer kun 12 kg.
+        </span>
+      </div>
+    </section>
+
+    <!-- LESSON 2 -->
+    <section id="lesson-2" class="lesson">
+      <div class="lesson-num" data-da="Lektion 2 · 12 min" data-en="Lesson 2 · 12 min">Lektion 2 · 12 min</div>
+      <h2 data-da="Væskers egenskaber" data-en="Fluid properties">Væskers egenskaber</h2>
+      <p class="lesson-intro"
+         data-da="Hydraulik virker fordi <strong>væsker kan ikke trykkes sammen</strong>. Lad os se hvorfor det er så vigtigt."
+         data-en="Hydraulics works because <strong>liquids can't be compressed</strong>. Let's see why that matters so much.">
+        Hydraulik virker fordi <strong>væsker kan ikke trykkes sammen</strong>.
+      </p>
+
+      <h3 data-da="De tre nøgleegenskaber" data-en="The three key properties">De tre nøgleegenskaber</h3>
+      <div class="card-grid">
+        <div class="info-card">
+          <div class="info-card-icon">🌊</div>
+          <h4 data-da="Ingen ydre form" data-en="No outer shape">Ingen ydre form</h4>
+          <p data-da="Væsker fylder det tilgængelige volumen. Hæld vand i en kande — det tager formen."
+             data-en="Liquids fill the available volume. Pour water in a jug — it takes the shape.">
+            Væsker fylder det tilgængelige volumen.
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🔒</div>
+          <h4 data-da="Næsten ikke-komprimerbar" data-en="Nearly incompressible">Næsten ikke-komprimerbar</h4>
+          <p data-da="Selv ved 1000 bar reduceres oliens volumen kun med ca. 1-2%. Det er <em>nøglen</em> til hydraulisk kraftoverførsel."
+             data-en="Even at 1000 bar, oil volume reduces only ~1-2%. That's the <em>key</em> to hydraulic power transfer.">
+            Selv ved 1000 bar reduceres oliens volumen kun med ca. 1-2%.
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">⬇️</div>
+          <h4 data-da="Tryk = højde · densitet · g" data-en="Pressure = height · density · g">Tryk = højde · densitet · g</h4>
+          <p data-da="Trykket i en væskesøjle er kun afhængigt af søjlens højde — ikke beholderens form."
+             data-en="Pressure in a fluid column depends only on column height — not container shape.">
+            Trykket i en væskesøjle er kun afhængigt af søjlens højde.
+          </p>
+        </div>
+      </div>
+
+      <div class="formula-box">
+        <h4 data-da="Formel: Tryk i væskesøjle" data-en="Formula: Pressure in a fluid column">Formel: Tryk i væskesøjle</h4>
+        <div class="formula">
+          <span class="formula-symbol">p</span>
+          <span class="formula-eq">=</span>
+          <span class="formula-symbol">h · ρ · g</span>
+          <span class="formula-unit">[Pa]</span>
+        </div>
+        <div class="formula-legend">
+          <div><b>p</b> = <span data-da="tryk (Pa)" data-en="pressure (Pa)">tryk (Pa)</span></div>
+          <div><b>h</b> = <span data-da="højde af væskesøjlen (m)" data-en="height of fluid column (m)">højde af væskesøjlen (m)</span></div>
+          <div><b>ρ</b> = <span data-da="væskens densitet (kg/m³)" data-en="fluid density (kg/m³)">væskens densitet (kg/m³)</span></div>
+          <div><b>g</b> = <span data-da="tyngdeacceleration (9,81 m/s²)" data-en="gravitational acceleration (9.81 m/s²)">tyngdeacceleration (9,81 m/s²)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LESSON 3 -->
+    <section id="lesson-3" class="lesson">
+      <div class="lesson-num"
+           data-da="Lektion 3 · 15 min · ⭐ KERNEKONCEPT"
+           data-en="Lesson 3 · 15 min · ⭐ CORE CONCEPT">Lektion 3 · 15 min · ⭐ KERNEKONCEPT</div>
+      <h2 data-da="Pascals lov" data-en="Pascal's law">Pascals lov</h2>
+      <p class="lesson-intro"
+         data-da="Hvis du kun husker én ting fra hele kurset, så er det dette: <strong>Pascals lov</strong>."
+         data-en="If you remember only one thing from this entire course, this is it: <strong>Pascal's law</strong>.">
+        Hvis du kun husker én ting fra hele kurset, så er det dette.
+      </p>
+
+      <div class="big-quote">
+        <span data-da='"Trykket i et hvilket som helst punkt i en statisk væske er ens i alle retninger, og det udøver samme kraft på lige store arealer."'
+              data-en='"The pressure at any point in a static fluid is the same in all directions, and exerts the same force on equal areas."'>
+          "Trykket i et hvilket som helst punkt i en statisk væske er ens i alle retninger."
+        </span>
+        <cite data-da="— Blaise Pascal, 17. århundrede" data-en="— Blaise Pascal, 17th century">— Blaise Pascal, 17. århundrede</cite>
+      </div>
+
+      <h3 data-da="Hvad betyder det i praksis?" data-en="What does that mean in practice?">Hvad betyder det i praksis?</h3>
+      <p data-da="Forestil dig en lukket beholder med olie. Hvis du presser olien sammen ét sted, vil trykket være <strong>nøjagtig det samme</strong> overalt i beholderen — i toppen, i bunden, ved siderne. Trykket spredes øjeblikkeligt."
+         data-en="Imagine a closed container with oil. If you compress the oil at one point, pressure will be <strong>exactly the same</strong> everywhere in the container — top, bottom, sides. Pressure propagates instantly.">
+        Forestil dig en lukket beholder med olie.
+      </p>
+
+      <!-- Interactive Pascal's law demonstration -->
+      <div class="interactive-demo" id="pascalDemo">
+        <h4 data-da="🎮 Prøv selv: Træk i håndtaget" data-en="🎮 Try it: Drag the handle">🎮 Prøv selv: Træk i håndtaget</h4>
+        <p class="demo-instructions"
+           data-da="Træk i det lille stempel og se hvordan trykket forplanter sig til det store stempel og løfter lasten."
+           data-en="Drag the small piston and watch how pressure propagates to the large piston and lifts the load.">
+          Træk i det lille stempel og se hvordan trykket forplanter sig.
+        </p>
+        <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" class="pascal-svg">
+          <defs>
+            <pattern id="oilPattern" patternUnits="userSpaceOnUse" width="20" height="20">
+              <rect width="20" height="20" fill="#ff8c1a"/>
+              <circle cx="10" cy="10" r="2" fill="#c47100" opacity="0.4"/>
+            </pattern>
+            <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#888"/>
+              <stop offset="50%" stop-color="#444"/>
+              <stop offset="100%" stop-color="#222"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="400" fill="#faf8f3"/>
+          <path d="M 100 200 L 100 350 L 700 350 L 700 100 L 550 100 L 550 200 L 100 200 Z M 130 220 L 130 330 L 530 330 L 530 220 L 130 220"
+                fill="url(#oilPattern)" stroke="#1a1a1a" stroke-width="3"/>
+          <rect x="80" y="80" width="60" height="140" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+          <g id="smallPiston" transform="translate(0, 0)">
+            <rect x="85" y="100" width="50" height="20" fill="url(#metalGrad)" stroke="#1a1a1a" stroke-width="2"/>
+            <rect x="105" y="40" width="10" height="60" fill="url(#metalGrad)" stroke="#1a1a1a" stroke-width="2"/>
+            <circle cx="110" cy="35" r="15" fill="#d4392e" stroke="#1a1a1a" stroke-width="2"/>
+          </g>
+          <rect x="540" y="40" width="170" height="180" fill="none" stroke="#1a1a1a" stroke-width="3"/>
+          <g id="largePiston" transform="translate(0, 0)">
+            <rect x="545" y="180" width="160" height="20" fill="url(#metalGrad)" stroke="#1a1a1a" stroke-width="2"/>
+            <rect x="615" y="100" width="20" height="80" fill="url(#metalGrad)" stroke="#1a1a1a" stroke-width="2"/>
+            <g id="load">
+              <rect x="555" y="60" width="140" height="40" fill="#5fb3d4" stroke="#1a1a1a" stroke-width="2" rx="8"/>
+              <text x="625" y="85" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#1a1a1a" font-weight="bold">1000 kg</text>
+            </g>
+          </g>
+          <text x="110" y="240" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#1a1a1a">A₁ = 10 cm²</text>
+          <text x="625" y="240" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#1a1a1a">A₂ = 1000 cm²</text>
+          <text x="110" y="255" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#666">F₁ = <tspan id="f1display">100</tspan> N</text>
+          <text x="625" y="255" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#666">F₂ = <tspan id="f2display">10000</tspan> N</text>
+          <g transform="translate(370 280)">
+            <rect x="-60" y="-20" width="120" height="40" fill="white" stroke="#1a1a1a" stroke-width="2" rx="4"/>
+            <text x="0" y="-5" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666">TRYK / P</text>
+            <text x="0" y="12" text-anchor="middle" font-family="JetBrains Mono" font-size="14" font-weight="bold" fill="#ff8c1a">
+              <tspan id="pressureDisplay">10</tspan> bar
+            </text>
+          </g>
+        </svg>
+
+        <div class="demo-controls">
+          <label>
+            <span data-da="Tryk på lille stempel (F₁):" data-en="Force on small piston (F₁):">Tryk på lille stempel (F₁):</span>
+            <span id="forceValue">100</span> N
+            <input type="range" id="forceSlider" min="0" max="200" value="100" step="10">
+          </label>
+        </div>
+        <div class="demo-result">
+          <strong data-da="Resultat:" data-en="Result:">Resultat:</strong>
+          <span data-da="Du trykker med" data-en="You push with">Du trykker med</span>
+          <span id="resForce">100</span> N
+          <span data-da="og løfter en kraft 100× større:" data-en="and lift a force 100× greater:">og løfter en kraft 100× større:</span>
+          <span id="resLifted">10.000</span> N
+          <span data-da="≈ 1 ton." data-en="≈ 1 ton.">≈ 1 ton.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LESSON 4 -->
+    <section id="lesson-4" class="lesson">
+      <div class="lesson-num" data-da="Lektion 4 · 10 min" data-en="Lesson 4 · 10 min">Lektion 4 · 10 min</div>
+      <h2 data-da="Hydraulisk kraftforøgelse" data-en="Hydraulic force amplification">Hydraulisk kraftforøgelse</h2>
+      <p class="lesson-intro"
+         data-da="Det er ikke trolddom — det er bare god gammeldags fysik. Lad os regne på det."
+         data-en="It's not magic — just good old physics. Let's do the math.">
+        Det er ikke trolddom — det er bare god gammeldags fysik.
+      </p>
+
+      <h3 data-da="Grundprincippet" data-en="The basic principle">Grundprincippet</h3>
+      <p data-da="Hvis tryk er det samme i hele systemet, så:"
+         data-en="If pressure is the same throughout the system, then:">
+        Hvis tryk er det samme i hele systemet, så:
+      </p>
+
+      <div class="formula-box">
+        <div class="formula">
+          <span class="formula-symbol">p</span>
+          <span class="formula-eq">=</span>
+          <span class="formula-symbol">F₁/A₁</span>
+          <span class="formula-eq">=</span>
+          <span class="formula-symbol">F₂/A₂</span>
+        </div>
+        <p class="formula-explain"
+           data-da="Hvilket betyder: hvis A₂ er 100× større end A₁, så bliver F₂ også 100× større end F₁. <strong>Du har lige multipliceret din kraft med 100!</strong>"
+           data-en="Which means: if A₂ is 100× larger than A₁, then F₂ is also 100× larger than F₁. <strong>You just multiplied your force by 100!</strong>">
+          Hvilket betyder: hvis A₂ er 100× større end A₁, så bliver F₂ også 100× større end F₁.
+        </p>
+      </div>
+
+      <div class="callout callout-warning">
+        <b data-da="⚠️ Men husk:" data-en="⚠️ But remember:">⚠️ Men husk:</b>
+        <span data-da="Energi kan ikke skabes ud af ingenting. Det store stempel bevæger sig 100× <em>langsommere</em> end det lille. Du har byttet hastighed for kraft."
+              data-en="Energy can't be created from nothing. The large piston moves 100× <em>slower</em> than the small one. You traded velocity for force.">
+          Energi kan ikke skabes ud af ingenting.
+        </span>
+      </div>
+
+      <!-- Interactive calculator -->
+      <div class="calculator">
+        <h4 data-da="🧮 Beregner: Hydraulisk kraftforøgelse"
+            data-en="🧮 Calculator: Hydraulic force amplification">🧮 Beregner: Hydraulisk kraftforøgelse</h4>
+        <div class="calc-grid">
+          <label>
+            <span data-da="Lille stempelareal A₁ (cm²)" data-en="Small piston area A₁ (cm²)">Lille stempelareal A₁ (cm²)</span>
+            <input type="number" id="calcA1" value="10" min="1">
+          </label>
+          <label>
+            <span data-da="Stort stempelareal A₂ (cm²)" data-en="Large piston area A₂ (cm²)">Stort stempelareal A₂ (cm²)</span>
+            <input type="number" id="calcA2" value="500" min="1">
+          </label>
+          <label>
+            <span data-da="Tryk på lille stempel F₁ (N)" data-en="Force on small piston F₁ (N)">Tryk på lille stempel F₁ (N)</span>
+            <input type="number" id="calcF1" value="100" min="1">
+          </label>
+          <label>
+            <span data-da="Bevægelse af lille stempel s₁ (mm)" data-en="Small piston travel s₁ (mm)">Bevægelse af lille stempel s₁ (mm)</span>
+            <input type="number" id="calcS1" value="100" min="1">
+          </label>
+        </div>
+        <button class="btn btn-primary" onclick="calculateForce()" data-da="Beregn →" data-en="Calculate →">Beregn →</button>
+        <div class="calc-result" id="calcResult">
+          <div class="result-item">
+            <span data-da="Tryk i systemet" data-en="System pressure">Tryk i systemet</span>
+            <strong><span id="resP">10</span> bar</strong>
+          </div>
+          <div class="result-item">
+            <span data-da="Kraft fra stort stempel F₂" data-en="Force from large piston F₂">Kraft fra stort stempel F₂</span>
+            <strong><span id="resF2">5.000</span> N</strong>
+          </div>
+          <div class="result-item">
+            <span data-da="Bevægelse af stort stempel s₂" data-en="Large piston travel s₂">Bevægelse af stort stempel s₂</span>
+            <strong><span id="resS2">2</span> mm</strong>
+          </div>
+          <div class="result-item">
+            <span data-da="Kraftforøgelse" data-en="Force amplification">Kraftforøgelse</span>
+            <strong><span id="resMult">50</span>×</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LESSON 5 -->
+    <section id="lesson-5" class="lesson">
+      <div class="lesson-num" data-da="Lektion 5 · 8 min" data-en="Lesson 5 · 8 min">Lektion 5 · 8 min</div>
+      <h2 data-da="Strømningsformer" data-en="Flow types">Strømningsformer</h2>
+      <p class="lesson-intro"
+         data-da="Når olien bevæger sig, sker det enten <em>roligt</em> eller <em>kaotisk</em>. I hydraulik vil vi altid have det roligt."
+         data-en="When oil moves, it does so either <em>calmly</em> or <em>chaotically</em>. In hydraulics we always want it calm.">
+        Når olien bevæger sig, sker det enten roligt eller kaotisk.
+      </p>
+
+      <div class="comparison">
+        <div class="comparison-item good">
+          <h4 data-da="✓ Laminar strømning" data-en="✓ Laminar flow">✓ Laminar strømning</h4>
+          <div class="flow-viz laminar">
+            <div class="flow-line"></div>
+            <div class="flow-line"></div>
+            <div class="flow-line"></div>
+            <div class="flow-line"></div>
+            <div class="flow-line"></div>
+          </div>
+          <p data-da="Molekylerne bevæger sig i <strong>velordnede parallelle lag</strong>. Tryktab er proportional med viskositet og hastighed."
+             data-en="Molecules move in <strong>orderly parallel layers</strong>. Pressure loss is proportional to viscosity and velocity.">
+            Molekylerne bevæger sig i <strong>velordnede parallelle lag</strong>.
+          </p>
+          <small data-da="👍 Det vi tilstræber i hydrauliske systemer" data-en="👍 What we aim for in hydraulic systems">👍 Det vi tilstræber i hydrauliske systemer</small>
+        </div>
+
+        <div class="comparison-item bad">
+          <h4 data-da="✗ Turbulent strømning" data-en="✗ Turbulent flow">✗ Turbulent strømning</h4>
+          <div class="flow-viz turbulent">
+            <div class="flow-swirl"></div>
+            <div class="flow-swirl"></div>
+            <div class="flow-swirl"></div>
+          </div>
+          <p data-da="Hvirvlende, kaotiske baner. Molekylerne tilbagelægger længere strækninger. <strong>Større modstand</strong> og hydrauliske tab."
+             data-en="Swirling, chaotic paths. Molecules travel longer distances. <strong>Greater resistance</strong> and hydraulic losses.">
+            Hvirvlende, kaotiske baner.
+          </p>
+          <small data-da="👎 Undgås så vidt muligt" data-en="👎 Avoid where possible">👎 Undgås så vidt muligt</small>
+        </div>
+      </div>
+
+      <h3 data-da="Hvornår skifter strømningen?" data-en="When does flow transition?">Hvornår skifter strømningen?</h3>
+      <p data-da="Ved en bestemt hastighed — den <strong>kritiske hastighed</strong> — skifter laminar strømning til turbulent. Derfor er der grænser for oliehastighed i rør:"
+         data-en="At a certain velocity — the <strong>critical velocity</strong> — laminar flow turns turbulent. Hence the velocity limits for oil in pipes:">
+        Ved en bestemt hastighed skifter laminar strømning til turbulent.
+      </p>
+
+      <table class="data-table">
+        <thead><tr>
+          <th data-da="Rørtype" data-en="Pipe type">Rørtype</th>
+          <th data-da="Maks. hastighed" data-en="Max velocity">Maks. hastighed</th>
+        </tr></thead>
+        <tbody>
+          <tr><td data-da="Sugerør" data-en="Suction line">Sugerør</td><td data-da="0,6 - 1,5 m/s" data-en="0.6 - 1.5 m/s">0,6 - 1,5 m/s</td></tr>
+          <tr><td data-da="Trykrør (almindelig)" data-en="Pressure line (normal)">Trykrør (almindelig)</td><td data-da="2 - 6 m/s" data-en="2 - 6 m/s">2 - 6 m/s</td></tr>
+          <tr><td data-da="Trykrør (korte)" data-en="Pressure line (short)">Trykrør (korte)</td><td data-da="op til 9 m/s" data-en="up to 9 m/s">op til 9 m/s</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz-section" class="lesson quiz-section">
+      <div class="lesson-num" data-da="Quiz · 10 spørgsmål" data-en="Quiz · 10 questions">Quiz · 10 spørgsmål</div>
+      <h2 data-da="Test din viden" data-en="Test your knowledge">Test din viden</h2>
+      <p class="lesson-intro"
+         data-da="Du skal have 7 ud af 10 rigtige for at få bestået. Hvert spørgsmål viser feedback med det samme."
+         data-en="You need 7 out of 10 to pass. Each question shows feedback immediately.">
+        Du skal have 7 ud af 10 rigtige for at få bestået.
+      </p>
+
+      <div id="quizContainer" class="quiz">
+        <!-- Questions injected by JS -->
+      </div>
+
+      <div class="quiz-result" id="quizResult" style="display:none">
+        <h3 id="quizResultTitle"></h3>
+        <p id="quizResultText"></p>
+        <button class="btn btn-secondary" onclick="resetQuiz()" data-da="Prøv igen" data-en="Try again">Prøv igen</button>
+        <a href="../02-vaesker-urenheder/index.html" class="btn btn-primary" id="nextModuleBtn"
+           data-da="Næste modul →" data-en="Next module →">Næste modul →</a>
+      </div>
+    </section>
+
+    <section class="module-footer">
+      <div class="module-nav">
+        <a href="../../index.html" class="module-nav-link">
+          <small data-da="Tilbage til" data-en="Back to">Tilbage til</small>
+          <strong data-da="← Alle moduler" data-en="← All modules">← Alle moduler</strong>
+        </a>
+        <a href="../02-vaesker-urenheder/index.html" class="module-nav-link module-nav-next">
+          <small data-da="Næste modul" data-en="Next module">Næste modul</small>
+          <strong data-da="02 · Hydraulikvæsker →" data-en="02 · Hydraulic fluids →">02 · Hydraulikvæsker →</strong>
+        </a>
+      </div>
+    </section>
+
+  </article>
+</main>
+
+<script src="../../assets/js/i18n.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="lesson.js"></script>
+</body>
+</html>

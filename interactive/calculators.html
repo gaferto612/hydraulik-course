@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beregnere · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/module.css">
+<style>
+  .calc-section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+  .calc-intro { max-width: 700px; margin-bottom: 3rem; }
+  .calc-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+  .calc-card { background: var(--white); border: var(--border); border-radius: var(--radius); padding: 2rem; transition: all 0.3s; }
+  .calc-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .calc-card h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .calc-card p.calc-desc { font-size: 0.95rem; color: var(--steel); margin-bottom: 1.5rem; }
+  .calc-card label { display: block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--steel); margin-bottom: 0.5rem; }
+  .calc-card input, .calc-card select { display: block; width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid var(--concrete); border-radius: var(--radius); font-family: var(--font-mono); font-size: 1rem; }
+  .calc-card input:focus { outline: none; border-color: var(--oil); }
+  .calc-output { margin-top: 1.5rem; padding: 1rem 1.5rem; background: var(--ink); color: var(--paper); border-radius: var(--radius); font-family: var(--font-mono); }
+  .calc-output .out-label { font-size: 0.75rem; color: var(--concrete); text-transform: uppercase; letter-spacing: 0.1em; }
+  .calc-output .out-value { display: block; font-size: 1.8rem; color: var(--oil-light); margin-top: 0.3rem; font-weight: 700; }
+  .calc-output .out-unit { font-size: 1rem; color: var(--bone); margin-left: 0.5rem; }
+  .formula-mini { font-family: var(--font-mono); font-size: 0.85rem; color: var(--oil-dark); background: var(--bone); padding: 0.5rem 1rem; border-radius: var(--radius); display: inline-block; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="animations.html" data-da="Animationer" data-en="Animations">Animationer</a>
+    <a href="circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="formulas.html" data-da="Formler" data-en="Formulas">Formler</a>
+    <a href="../quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<section class="calc-section">
+  <div class="module-breadcrumb">
+    <a href="../index.html" data-da="Hjem" data-en="Home">Hjem</a>
+    <span>/</span>
+    <span data-da="Beregnere" data-en="Calculators">Beregnere</span>
+  </div>
+
+  <h1 style="font-family: var(--font-display); font-size: 3rem; font-weight: 900; margin-bottom: 1rem;"
+      data-da="Beregnere" data-en="Calculators">Beregnere</h1>
+  <p class="calc-intro" style="font-size: 1.2rem; color: var(--steel);"
+     data-da="Interaktive beregnere til alle de almindelige hydrauliske formler. Indtast værdier og se resultaterne med det samme — perfekt til opgaver, designtjek eller fejlfinding på arbejde."
+     data-en="Interactive calculators for all the common hydraulic formulas. Enter values and see results instantly — perfect for homework, design checks, or troubleshooting on the job.">
+    Interaktive beregnere til alle de almindelige hydrauliske formler.
+  </p>
+
+  <div class="calc-list">
+
+    <!-- Cylinder Force -->
+    <div class="calc-card">
+      <h3 data-da="Cylinderkraft" data-en="Cylinder force">Cylinderkraft</h3>
+      <p class="calc-desc"
+         data-da="Hvor stor en kraft kan en cylinder yde ved et givet tryk?"
+         data-en="How much force can a cylinder produce at a given pressure?">
+        Hvor stor en kraft kan en cylinder yde ved et givet tryk?
+      </p>
+      <div class="formula-mini">F = p · A · η</div>
+      <label><span data-da="Tryk p (bar)" data-en="Pressure p (bar)">Tryk p (bar)</span><input type="number" id="cylP" value="200" min="0"></label>
+      <label><span data-da="Cylinderdiameter D (mm)" data-en="Cylinder diameter D (mm)">Cylinderdiameter D (mm)</span><input type="number" id="cylD" value="80" min="0"></label>
+      <label><span data-da="Virkningsgrad η" data-en="Efficiency η">Virkningsgrad η</span><input type="number" id="cylEta" value="0.95" min="0" max="1" step="0.01"></label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Kraft" data-en="Force">Kraft</span>
+        <span class="out-value" id="cylForce">9.550</span><span class="out-unit">N</span>
+      </div>
+    </div>
+
+    <!-- Piston Speed -->
+    <div class="calc-card">
+      <h3 data-da="Stempelhastighed" data-en="Piston speed">Stempelhastighed</h3>
+      <p class="calc-desc"
+         data-da="Hvor hurtigt bevæger stemplet sig ved en given oliestrøm?"
+         data-en="How fast does the piston move at a given flow rate?">
+        Hvor hurtigt bevæger stemplet sig ved en given oliestrøm?
+      </p>
+      <div class="formula-mini">v = qV / A</div>
+      <label><span data-da="Oliestrøm qV (l/min)" data-en="Flow rate qV (l/min)">Oliestrøm qV (l/min)</span><input type="number" id="vsQv" value="20" min="0"></label>
+      <label><span data-da="Cylinderdiameter D (mm)" data-en="Cylinder diameter D (mm)">Cylinderdiameter D (mm)</span><input type="number" id="vsD" value="63" min="0"></label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Stempelhastighed" data-en="Piston speed">Stempelhastighed</span>
+        <span class="out-value" id="pistonSpeed">0,107</span><span class="out-unit">m/s</span>
+      </div>
+    </div>
+
+    <!-- Hydraulic Power -->
+    <div class="calc-card">
+      <h3 data-da="Hydraulisk effekt" data-en="Hydraulic power">Hydraulisk effekt</h3>
+      <p class="calc-desc"
+         data-da="Beregn effekten i kW ud fra tryk og flow."
+         data-en="Calculate power in kW from pressure and flow.">
+        Beregn effekten i kW ud fra tryk og flow.
+      </p>
+      <div class="formula-mini">P = p · qV / 600</div>
+      <label><span data-da="Tryk p (bar)" data-en="Pressure p (bar)">Tryk p (bar)</span><input type="number" id="pwP" value="180" min="0"></label>
+      <label><span data-da="Oliestrøm qV (l/min)" data-en="Flow rate qV (l/min)">Oliestrøm qV (l/min)</span><input type="number" id="pwQv" value="40" min="0"></label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Effekt" data-en="Power">Effekt</span>
+        <span class="out-value" id="powerResult">12,0</span><span class="out-unit">kW</span>
+      </div>
+    </div>
+
+    <!-- Pipe diameter -->
+    <div class="calc-card">
+      <h3 data-da="Rørdiameter" data-en="Pipe diameter">Rørdiameter</h3>
+      <p class="calc-desc"
+         data-da="Hvilken indvendig rørdiameter skal du bruge?"
+         data-en="What inner pipe diameter do you need?">
+        Hvilken indvendig rørdiameter skal du bruge?
+      </p>
+      <div class="formula-mini">d = √(4·qV / π·v)</div>
+      <label><span data-da="Oliestrøm qV (l/min)" data-en="Flow rate qV (l/min)">Oliestrøm qV (l/min)</span><input type="number" id="pdQv" value="50" min="0"></label>
+      <label>
+        <span data-da="Maks. hastighed v (m/s)" data-en="Max velocity v (m/s)">Maks. hastighed v (m/s)</span>
+        <select id="pdV">
+          <option value="1" data-da="1 m/s (sugerør, lav)" data-en="1 m/s (suction, low)">1 m/s (sugerør, lav)</option>
+          <option value="1.5" selected data-da="1,5 m/s (sugerør, høj)" data-en="1.5 m/s (suction, high)">1,5 m/s (sugerør, høj)</option>
+          <option value="4" data-da="4 m/s (trykrør, normal)" data-en="4 m/s (pressure, normal)">4 m/s (trykrør, normal)</option>
+          <option value="6" data-da="6 m/s (trykrør, høj)" data-en="6 m/s (pressure, high)">6 m/s (trykrør, høj)</option>
+        </select>
+      </label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Indvendig diameter" data-en="Inner diameter">Indvendig diameter</span>
+        <span class="out-value" id="pipeDia">26,6</span><span class="out-unit">mm</span>
+      </div>
+    </div>
+
+    <!-- Motor torque -->
+    <div class="calc-card">
+      <h3 data-da="Motormoment" data-en="Motor torque">Motormoment</h3>
+      <p class="calc-desc"
+         data-da="Hvor stort drejningsmoment yder en hydraulisk motor?"
+         data-en="How much torque does a hydraulic motor produce?">
+        Hvor stort drejningsmoment yder en hydraulisk motor?
+      </p>
+      <div class="formula-mini">M = (V · Δp) / (2π · 10)</div>
+      <label><span data-da="Fortrængning V (cm³/omdr)" data-en="Displacement V (cm³/rev)">Fortrængning V (cm³/omdr)</span><input type="number" id="mtV" value="100" min="0"></label>
+      <label><span data-da="Trykfald Δp (bar)" data-en="Pressure drop Δp (bar)">Trykfald Δp (bar)</span><input type="number" id="mtDp" value="150" min="0"></label>
+      <label><span data-da="Mekanisk virkningsgrad η" data-en="Mechanical efficiency η">Mekanisk virkningsgrad η</span><input type="number" id="mtEta" value="0.9" min="0" max="1" step="0.01"></label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Drejningsmoment" data-en="Torque">Drejningsmoment</span>
+        <span class="out-value" id="motorTorque">214,9</span><span class="out-unit">Nm</span>
+      </div>
+    </div>
+
+    <!-- Pressure conversion -->
+    <div class="calc-card">
+      <h3 data-da="Trykomregning" data-en="Pressure converter">Trykomregning</h3>
+      <p class="calc-desc"
+         data-da="Konverter mellem bar, MPa, psi og kp/cm²."
+         data-en="Convert between bar, MPa, psi and kp/cm².">
+        Konverter mellem bar, MPa, psi og kp/cm².
+      </p>
+      <div class="formula-mini">1 bar = 14,5 psi = 100 kPa</div>
+      <label>Bar<input type="number" id="cvBar" value="200" oninput="convertPressure('bar')"></label>
+      <label>MPa<input type="number" id="cvMPa" value="20" oninput="convertPressure('mpa')"></label>
+      <label>psi<input type="number" id="cvPsi" value="2900" oninput="convertPressure('psi')"></label>
+      <label>kp/cm²<input type="number" id="cvKp" value="204" oninput="convertPressure('kp')"></label>
+    </div>
+
+    <!-- Tank size -->
+    <div class="calc-card">
+      <h3 data-da="Tankstørrelse" data-en="Tank size">Tankstørrelse</h3>
+      <p class="calc-desc"
+         data-da="Hvor stor en tank har dit system brug for?"
+         data-en="How big a tank does your system need?">
+        Hvor stor en tank har dit system brug for?
+      </p>
+      <div class="formula-mini" data-da="Stationær: V = 3-5 · qV · Mobil: V = 0,5-1,5 · qV"
+           data-en="Stationary: V = 3-5 · qV · Mobile: V = 0.5-1.5 · qV">
+        Stationær: V = 3-5 · qV · Mobil: V = 0,5-1,5 · qV
+      </div>
+      <label><span data-da="Pumpekapacitet qV (l/min)" data-en="Pump capacity qV (l/min)">Pumpekapacitet qV (l/min)</span><input type="number" id="tnkQv" value="40" min="0"></label>
+      <label>
+        <span data-da="Type" data-en="Type">Type</span>
+        <select id="tnkType">
+          <option value="stationary" data-da="Stationær (industri)" data-en="Stationary (industrial)">Stationær (industri)</option>
+          <option value="mobile" data-da="Mobil (køretøj)" data-en="Mobile (vehicle)">Mobil (køretøj)</option>
+        </select>
+      </label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Anbefalet tankstørrelse" data-en="Recommended tank size">Anbefalet tankstørrelse</span>
+        <span class="out-value" id="tankSize">120-200</span><span class="out-unit" data-da="liter" data-en="liters">liter</span>
+      </div>
+    </div>
+
+    <!-- Reynolds for flow -->
+    <div class="calc-card">
+      <h3 data-da="Strømningstype" data-en="Flow type">Strømningstype</h3>
+      <p class="calc-desc"
+         data-da="Er din strømning laminar eller turbulent?"
+         data-en="Is your flow laminar or turbulent?">
+        Er din strømning laminar eller turbulent?
+      </p>
+      <div class="formula-mini">Re = v · d / ν · 1000</div>
+      <label><span data-da="Oliehastighed v (m/s)" data-en="Oil velocity v (m/s)">Oliehastighed v (m/s)</span><input type="number" id="reV" value="3" min="0" step="0.1"></label>
+      <label><span data-da="Indvendig rørdiameter d (mm)" data-en="Inner pipe diameter d (mm)">Indvendig rørdiameter d (mm)</span><input type="number" id="reD" value="20" min="0"></label>
+      <label><span data-da="Kinematisk viskositet ν (cSt)" data-en="Kinematic viscosity ν (cSt)">Kinematisk viskositet ν (cSt)</span><input type="number" id="reNu" value="46" min="0"></label>
+      <div class="calc-output">
+        <span class="out-label" data-da="Reynolds-tal / Strømning" data-en="Reynolds number / Flow">Reynolds-tal / Strømning</span>
+        <span class="out-value" id="reResult">1.304</span>
+        <span class="out-unit" id="reType">laminar ✓</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="../assets/js/i18n.js"></script>
+<script>
+function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function locale() { return (window.HydraulikI18n && window.HydraulikI18n.getLang() === 'en') ? 'en-US' : 'da-DK'; }
+function set(id, val, decimals = 2) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = val.toLocaleString(locale(), {
+    minimumFractionDigits: decimals, maximumFractionDigits: decimals
+  });
+}
+
+function calcCylinder() {
+  const p = num('cylP');
+  const D = num('cylD');
+  const eta = num('cylEta');
+  const A = Math.PI * Math.pow(D / 2, 2) / 100; // mm² to cm²
+  const F = p * A * eta * 10; // F[N] = p[bar] * A[cm²] * 10 (since 1 bar = 10 N/cm²)
+  set('cylForce', F, 0);
+}
+
+function calcPistonSpeed() {
+  const qV = num('vsQv');
+  const D = num('vsD');
+  const A = Math.PI * Math.pow(D / 2, 2); // mm²
+  const v = (qV * 1e6 / 60) / A / 1000; // m/s
+  set('pistonSpeed', v, 3);
+}
+
+function calcPower() {
+  const p = num('pwP');
+  const qV = num('pwQv');
+  set('powerResult', (p * qV) / 600, 1);
+}
+
+function calcPipeDia() {
+  const qV = num('pdQv');
+  const v = num('pdV');
+  if (!v) return;
+  const A = (qV / 60000) / v; // m²
+  const d = Math.sqrt(4 * A / Math.PI) * 1000; // mm
+  set('pipeDia', d, 1);
+}
+
+function calcMotorTorque() {
+  const V = num('mtV');
+  const dp = num('mtDp');
+  const eta = num('mtEta');
+  const M = (V * dp * eta) / (2 * Math.PI * 10);
+  set('motorTorque', M, 1);
+}
+
+function convertPressure(from) {
+  let bar;
+  if (from === 'bar') bar = num('cvBar');
+  else if (from === 'mpa') bar = num('cvMPa') * 10;
+  else if (from === 'psi') bar = num('cvPsi') / 14.504;
+  else if (from === 'kp') bar = num('cvKp') / 1.0197;
+
+  if (from !== 'bar') document.getElementById('cvBar').value = bar.toFixed(2);
+  if (from !== 'mpa') document.getElementById('cvMPa').value = (bar / 10).toFixed(3);
+  if (from !== 'psi') document.getElementById('cvPsi').value = (bar * 14.504).toFixed(1);
+  if (from !== 'kp') document.getElementById('cvKp').value = (bar * 1.0197).toFixed(2);
+}
+window.convertPressure = convertPressure;
+
+function calcTank() {
+  const qV = num('tnkQv');
+  const type = document.getElementById('tnkType').value;
+  let lo, hi;
+  if (type === 'stationary') { lo = qV * 3; hi = qV * 5; }
+  else { lo = qV * 0.5; hi = qV * 1.5; }
+  document.getElementById('tankSize').textContent = `${lo.toFixed(0)}-${hi.toFixed(0)}`;
+}
+
+function calcReynolds() {
+  const v = num('reV');
+  const d = num('reD');
+  const nu = num('reNu');
+  const Re = (v * d) / (nu / 1000);
+  const safeRe = Re || 0;
+  set('reResult', safeRe, 0);
+  const typeEl = document.getElementById('reType');
+  const lang = (window.HydraulikI18n && window.HydraulikI18n.getLang()) || 'da';
+  const labels = {
+    laminar: { da: 'laminar ✓', en: 'laminar ✓' },
+    trans: { da: 'overgang ⚠', en: 'transition ⚠' },
+    turbulent: { da: 'turbulent ✗', en: 'turbulent ✗' }
+  };
+  if (safeRe < 2300) { typeEl.textContent = labels.laminar[lang]; typeEl.style.color = '#7fc97f'; }
+  else if (safeRe < 4000) { typeEl.textContent = labels.trans[lang]; typeEl.style.color = '#e6c419'; }
+  else { typeEl.textContent = labels.turbulent[lang]; typeEl.style.color = '#d4392e'; }
+}
+
+document.querySelectorAll('#cylP, #cylD, #cylEta').forEach(el => el.addEventListener('input', calcCylinder));
+document.querySelectorAll('#vsQv, #vsD').forEach(el => el.addEventListener('input', calcPistonSpeed));
+document.querySelectorAll('#pwP, #pwQv').forEach(el => el.addEventListener('input', calcPower));
+document.querySelectorAll('#pdQv, #pdV').forEach(el => el.addEventListener('input', calcPipeDia));
+document.querySelectorAll('#mtV, #mtDp, #mtEta').forEach(el => el.addEventListener('input', calcMotorTorque));
+document.querySelectorAll('#tnkQv, #tnkType').forEach(el => el.addEventListener('input', calcTank));
+document.querySelectorAll('#reV, #reD, #reNu').forEach(el => el.addEventListener('input', calcReynolds));
+
+// Translate <option> elements (data-da/data-en) — innerHTML for options needs special handling
+function updateOptionTexts() {
+  const lang = (window.HydraulikI18n && window.HydraulikI18n.getLang()) || 'da';
+  document.querySelectorAll('option[data-da][data-en]').forEach(opt => {
+    const t = opt.getAttribute('data-' + lang);
+    if (t) opt.textContent = t;
+  });
+}
+updateOptionTexts();
+
+// Initial calculations
+calcCylinder(); calcPistonSpeed(); calcPower(); calcPipeDia();
+calcMotorTorque(); calcTank(); calcReynolds();
+
+// Re-render numbers and options when language changes
+if (window.HydraulikI18n && window.HydraulikI18n.onChange) {
+  window.HydraulikI18n.onChange(() => {
+    updateOptionTexts();
+    calcCylinder(); calcPistonSpeed(); calcPower(); calcPipeDia();
+    calcMotorTorque(); calcTank(); calcReynolds();
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hydraulik — Interaktivt Kursus / Interactive Course</title>
+<meta name="description" content="Lær hydraulik gratis online · Learn hydraulics free online">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="interactive/calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="interactive/animations.html" data-da="Animationer" data-en="Animations">Animationer</a>
+    <a href="interactive/circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+    <a href="https://github.com/yourusername/hydraulik-course" class="github-link">GitHub ↗</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-tag" data-da="Frit · Open Source · CC BY-SA" data-en="Free · Open Source · CC BY-SA">Frit · Open Source · CC BY-SA</div>
+    <h1 class="hero-title"
+        data-da='Lær <em>hydraulik</em><br>gennem at <span class="hero-accent">se den arbejde</span>.'
+        data-en='Learn <em>hydraulics</em><br>by <span class="hero-accent">watching it work</span>.'>
+      Lær <em>hydraulik</em><br>
+      gennem at <span class="hero-accent">se den arbejde</span>.
+    </h1>
+    <p class="hero-sub"
+       data-da="27 timers interaktivt kursus baseret på den klassiske danske lærebog. Animerede komponenter, beregnere du kan røre ved, og en kredsløbssimulator."
+       data-en="27 hours of interactive course based on the classic Danish textbook. Animated components, hands-on calculators, and a circuit simulator.">
+      27 timers interaktivt kursus baseret på den klassiske danske lærebog.
+    </p>
+    <div class="hero-cta">
+      <a href="modules/01-grundlaeggende/index.html" class="btn btn-primary"
+         data-da="Start Modul 1 →" data-en="Start Module 1 →">Start Modul 1 →</a>
+      <a href="#moduler" class="btn btn-secondary"
+         data-da="Se alle moduler" data-en="See all modules">Se alle moduler</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>12</b> <span data-da="moduler" data-en="modules">moduler</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><b>27<span data-da="t" data-en="h">t</span></b> <span data-da="indhold" data-en="content">indhold</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><b>50+</b> <span data-da="animationer" data-en="animations">animationer</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><b data-da="0 kr." data-en="Free">0 kr.</b></div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="oilGrad" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#ffb84d"/>
+          <stop offset="100%" stop-color="#c47100"/>
+        </radialGradient>
+      </defs>
+      <circle cx="200" cy="200" r="160" fill="none" stroke="#1a1a1a" stroke-width="2" opacity="0.3"/>
+      <circle cx="200" cy="200" r="140" fill="none" stroke="#1a1a1a" stroke-width="1" opacity="0.2"/>
+      <g class="gear-1">
+        <g transform="translate(140 200)">
+          <circle r="50" fill="#2a2a2a"/>
+          <g fill="#444">
+            <rect x="-6" y="-58" width="12" height="16"/><rect x="-6" y="42" width="12" height="16"/>
+            <rect x="-58" y="-6" width="16" height="12"/><rect x="42" y="-6" width="16" height="12"/>
+            <rect x="-44" y="-44" width="14" height="14" transform="rotate(45)"/>
+            <rect x="30" y="-44" width="14" height="14" transform="rotate(45)"/>
+            <rect x="-44" y="30" width="14" height="14" transform="rotate(45)"/>
+            <rect x="30" y="30" width="14" height="14" transform="rotate(45)"/>
+          </g>
+          <circle r="10" fill="#ff9933"/>
+        </g>
+      </g>
+      <g class="gear-2">
+        <g transform="translate(260 200)">
+          <circle r="50" fill="#2a2a2a"/>
+          <g fill="#444">
+            <rect x="-6" y="-58" width="12" height="16"/><rect x="-6" y="42" width="12" height="16"/>
+            <rect x="-58" y="-6" width="16" height="12"/><rect x="42" y="-6" width="16" height="12"/>
+            <rect x="-44" y="-44" width="14" height="14" transform="rotate(45)"/>
+            <rect x="30" y="-44" width="14" height="14" transform="rotate(45)"/>
+            <rect x="-44" y="30" width="14" height="14" transform="rotate(45)"/>
+            <rect x="30" y="30" width="14" height="14" transform="rotate(45)"/>
+          </g>
+          <circle r="10" fill="#ff9933"/>
+        </g>
+      </g>
+      <g class="oil-flow">
+        <circle cx="200" cy="60" r="4" fill="url(#oilGrad)"/>
+        <circle cx="200" cy="80" r="3" fill="url(#oilGrad)" opacity="0.8"/>
+        <circle cx="200" cy="100" r="4" fill="url(#oilGrad)" opacity="0.6"/>
+      </g>
+      <g class="oil-flow-out">
+        <circle cx="200" cy="320" r="4" fill="url(#oilGrad)"/>
+        <circle cx="200" cy="340" r="3" fill="url(#oilGrad)" opacity="0.8"/>
+        <circle cx="200" cy="360" r="4" fill="url(#oilGrad)" opacity="0.6"/>
+      </g>
+      <text x="200" y="50" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666" data-da="SUG" data-en="SUCT">SUG</text>
+      <text x="200" y="375" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666" data-da="TRYK" data-en="PRESS">TRYK</text>
+    </svg>
+  </div>
+</header>
+
+<section class="section section-path">
+  <div class="section-head">
+    <span class="section-num">01</span>
+    <h2 data-da="Din læringsvej" data-en="Your learning path">Din læringsvej</h2>
+    <p class="section-lead" data-da="Fra fysiske grundprincipper til avancerede systemer. Hvert modul bygger på det forrige." data-en="From physics fundamentals to advanced systems. Each module builds on the previous.">Fra fysiske grundprincipper til avancerede systemer. Hvert modul bygger på det forrige.</p>
+  </div>
+
+  <div class="path">
+    <div class="path-line"></div>
+    <div class="path-node">
+      <div class="path-dot">⭐</div>
+      <div class="path-content">
+        <h3 data-da="Begynder" data-en="Beginner">Begynder</h3>
+        <p data-da="Modul 1-3 · 5,5 timer" data-en="Module 1-3 · 5.5 hours">Modul 1-3 · 5,5 timer</p>
+        <small data-da="Fysikgrundlag, væsker, urenheder og filtre" data-en="Physics basics, fluids, contamination and filters">Fysikgrundlag, væsker, urenheder og filtre</small>
+      </div>
+    </div>
+    <div class="path-node">
+      <div class="path-dot">⭐⭐</div>
+      <div class="path-content">
+        <h3 data-da="Let øvet" data-en="Intermediate">Let øvet</h3>
+        <p data-da="Modul 4-6, 12 · 9 timer" data-en="Module 4-6, 12 · 9 hours">Modul 4-6, 12 · 9 timer</p>
+        <small data-da="Pumper, motorer, cylindre — handleorganerne" data-en="Pumps, motors, cylinders — the actuators">Pumper, motorer, cylindre — handleorganerne</small>
+      </div>
+    </div>
+    <div class="path-node">
+      <div class="path-dot">⭐⭐⭐</div>
+      <div class="path-content">
+        <h3 data-da="Øvet" data-en="Advanced">Øvet</h3>
+        <p data-da="Modul 7-9, 11 · 9,5 timer" data-en="Module 7-9, 11 · 9.5 hours">Modul 7-9, 11 · 9,5 timer</p>
+        <small data-da="Ventiler og styring — hjertet i hydraulikken" data-en="Valves and control — the heart of hydraulics">Ventiler og styring — hjertet i hydraulikken</small>
+      </div>
+    </div>
+    <div class="path-node">
+      <div class="path-dot">⭐⭐⭐⭐</div>
+      <div class="path-content">
+        <h3 data-da="Avanceret" data-en="Expert">Avanceret</h3>
+        <p data-da="Modul 10 · 3 timer" data-en="Module 10 · 3 hours">Modul 10 · 3 timer</p>
+        <small data-da="Proportionalventiler, elektronik, CAN-bus" data-en="Proportional valves, electronics, CAN-bus">Proportionalventiler, elektronik, CAN-bus</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="moduler" class="section">
+  <div class="section-head">
+    <span class="section-num">02</span>
+    <h2 data-da="Alle moduler" data-en="All modules">Alle moduler</h2>
+    <p class="section-lead" data-da="Klik på et modul for at starte. Hvert modul har teori, animationer, interaktive elementer og quiz." data-en="Click a module to start. Each has theory, animations, interactive elements and quiz.">Klik på et modul for at starte. Hvert modul har teori, animationer, interaktive elementer og quiz.</p>
+  </div>
+
+  <div class="modules-grid">
+    <a href="modules/01-grundlaeggende/index.html" class="module-card" data-level="1">
+      <div class="module-num">01</div>
+      <h3 data-da="Grundlæggende hydraulik" data-en="Hydraulics fundamentals">Grundlæggende hydraulik</h3>
+      <p data-da="Pascals lov · Hydraulisk vs. mekanisk kraftforøgelse · Strømningsformer" data-en="Pascal's law · Force amplification · Flow types">Pascals lov · Hydraulisk vs. mekanisk kraftforøgelse · Strømningsformer</p>
+      <div class="module-meta"><span data-da="⭐ Begynder" data-en="⭐ Beginner">⭐ Begynder</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/02-vaesker-urenheder/index.html" class="module-card" data-level="1">
+      <div class="module-num">02</div>
+      <h3 data-da="Hydraulikvæsker" data-en="Hydraulic fluids">Hydraulikvæsker</h3>
+      <p data-da="Viskositet · Additiver · Urenheder · Olieprøver" data-en="Viscosity · Additives · Contamination · Oil samples">Viskositet · Additiver · Urenheder · Olieprøver</p>
+      <div class="module-meta"><span data-da="⭐ Begynder" data-en="⭐ Beginner">⭐ Begynder</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/03-filtre/index.html" class="module-card" data-level="2">
+      <div class="module-num">03</div>
+      <h3 data-da="Filtre og oliepleje" data-en="Filters and oil care">Filtre og oliepleje</h3>
+      <p data-da="Filtertyper · β-værdi · ISO 4406 · Off-line filtrering" data-en="Filter types · β-value · ISO 4406 · Off-line filtration">Filtertyper · β-værdi · ISO 4406 · Off-line filtrering</p>
+      <div class="module-meta"><span data-da="⭐⭐ Let øvet" data-en="⭐⭐ Intermediate">⭐⭐ Let øvet</span><span data-da="1,5t" data-en="1.5h">1,5t</span></div>
+    </a>
+
+    <a href="modules/04-pumper/index.html" class="module-card" data-level="2">
+      <div class="module-num">04</div>
+      <h3 data-da="Pumper" data-en="Pumps">Pumper</h3>
+      <p data-da="Tandhjuls · Vinge · Stempel · Variable pumper · Load Sensing" data-en="Gear · Vane · Piston · Variable · Load Sensing">Tandhjuls · Vinge · Stempel · Variable pumper · Load Sensing</p>
+      <div class="module-meta"><span data-da="⭐⭐ Let øvet" data-en="⭐⭐ Intermediate">⭐⭐ Let øvet</span><span data-da="3t" data-en="3h">3t</span></div>
+    </a>
+
+    <a href="modules/05-motorer/index.html" class="module-card" data-level="2">
+      <div class="module-num">05</div>
+      <h3 data-da="Hydrauliske motorer" data-en="Hydraulic motors">Hydrauliske motorer</h3>
+      <p data-da="Aksialstempel · Gerotor · Kamring · Hydrostatisk transmission" data-en="Axial piston · Gerotor · Cam ring · Hydrostatic transmission">Aksialstempel · Gerotor · Kamring · Hydrostatisk transmission</p>
+      <div class="module-meta"><span data-da="⭐⭐ Let øvet" data-en="⭐⭐ Intermediate">⭐⭐ Let øvet</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/06-cylindre/index.html" class="module-card" data-level="2">
+      <div class="module-num">06</div>
+      <h3 data-da="Cylindre" data-en="Cylinders">Cylindre</h3>
+      <p data-da="Enkelt/dobbeltvirkende · Teleskop · Pakninger · Dæmpning" data-en="Single/double acting · Telescopic · Seals · Cushioning">Enkelt/dobbeltvirkende · Teleskop · Pakninger · Dæmpning</p>
+      <div class="module-meta"><span data-da="⭐⭐ Let øvet" data-en="⭐⭐ Intermediate">⭐⭐ Let øvet</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/07-trykventiler/index.html" class="module-card" data-level="3">
+      <div class="module-num">07</div>
+      <h3 data-da="Trykventiler" data-en="Pressure valves">Trykventiler</h3>
+      <p data-da="Trykbegrænsning · Trykreduktion · Sænkebremse · Rækkefølge" data-en="Relief · Reducing · Counterbalance · Sequence">Trykbegrænsning · Trykreduktion · Sænkebremse · Rækkefølge</p>
+      <div class="module-meta"><span data-da="⭐⭐⭐ Øvet" data-en="⭐⭐⭐ Advanced">⭐⭐⭐ Øvet</span><span data-da="2,5t" data-en="2.5h">2,5t</span></div>
+    </a>
+
+    <a href="modules/08-retningsventiler/index.html" class="module-card" data-level="3">
+      <div class="module-num">08</div>
+      <h3 data-da="Retningsventiler" data-en="Directional valves">Retningsventiler</h3>
+      <p data-da="Glider · Sæde · Patron · Modulsystemer" data-en="Spool · Poppet · Cartridge · Modular">Glider · Sæde · Patron · Modulsystemer</p>
+      <div class="module-meta"><span data-da="⭐⭐⭐ Øvet" data-en="⭐⭐⭐ Advanced">⭐⭐⭐ Øvet</span><span data-da="3t" data-en="3h">3t</span></div>
+    </a>
+
+    <a href="modules/09-stroemventiler/index.html" class="module-card" data-level="3">
+      <div class="module-num">09</div>
+      <h3 data-da="Strømventiler" data-en="Flow valves">Strømventiler</h3>
+      <p data-da="Drøvling · Trykkompensering · Strømdelere" data-en="Throttling · Pressure compensation · Flow dividers">Drøvling · Trykkompensering · Strømdelere</p>
+      <div class="module-meta"><span data-da="⭐⭐⭐ Øvet" data-en="⭐⭐⭐ Advanced">⭐⭐⭐ Øvet</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/10-proportional-elektronik/index.html" class="module-card" data-level="4">
+      <div class="module-num">10</div>
+      <h3 data-da="Proportional &amp; elektronik" data-en="Proportional &amp; electronics">Proportional &amp; elektronik</h3>
+      <p data-da="Proportionalventiler · Microcontrollere · CAN-bus · PLUS+1" data-en="Proportional valves · Microcontrollers · CAN-bus · PLUS+1">Proportionalventiler · Microcontrollere · CAN-bus · PLUS+1</p>
+      <div class="module-meta"><span data-da="⭐⭐⭐⭐ Avanceret" data-en="⭐⭐⭐⭐ Expert">⭐⭐⭐⭐ Avanceret</span><span data-da="3t" data-en="3h">3t</span></div>
+    </a>
+
+    <a href="modules/11-akkumulatorer/index.html" class="module-card" data-level="3">
+      <div class="module-num">11</div>
+      <h3 data-da="Akkumulatorer &amp; styring" data-en="Accumulators &amp; steering">Akkumulatorer &amp; styring</h3>
+      <p data-da="Blære · Membran · Hydraulisk styring · Orbitrol" data-en="Bladder · Diaphragm · Hydraulic steering · Orbitrol">Blære · Membran · Hydraulisk styring · Orbitrol</p>
+      <div class="module-meta"><span data-da="⭐⭐⭐ Øvet" data-en="⭐⭐⭐ Advanced">⭐⭐⭐ Øvet</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+
+    <a href="modules/12-maaleteknik-vedligehold/index.html" class="module-card" data-level="2">
+      <div class="module-num">12</div>
+      <h3 data-da="Måleteknik &amp; vedligehold" data-en="Measurement &amp; maintenance">Måleteknik &amp; vedligehold</h3>
+      <p data-da="Manometre · Flowmetre · Fejlfinding · Sikkerhed" data-en="Pressure gauges · Flow meters · Troubleshooting · Safety">Manometre · Flowmetre · Fejlfinding · Sikkerhed</p>
+      <div class="module-meta"><span data-da="⭐⭐ Let øvet" data-en="⭐⭐ Intermediate">⭐⭐ Let øvet</span><span data-da="2t" data-en="2h">2t</span></div>
+    </a>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="section-head">
+    <span class="section-num section-num-light">03</span>
+    <h2 data-da="Interaktive værktøjer" data-en="Interactive tools">Interaktive værktøjer</h2>
+    <p class="section-lead" data-da="Hydraulik forstår man ikke ved at læse — man forstår den ved at <em>røre</em> ved den." data-en="You don't understand hydraulics by reading — you understand it by <em>touching</em> it.">Hydraulik forstår man ikke ved at læse — man forstår den ved at <em>røre</em> ved den.</p>
+  </div>
+
+  <div class="features-grid">
+    <a href="interactive/calculators.html" class="feature">
+      <div class="feature-icon">🧮</div>
+      <h3 data-da="Beregnere" data-en="Calculators">Beregnere</h3>
+      <p data-da="Cylinderkraft, oliestrøm, rørdiameter, effekt — 8 beregnere klar til brug." data-en="Cylinder force, flow, pipe diameter, power — 8 ready-to-use calculators.">Cylinderkraft, oliestrøm, rørdiameter, effekt — 8 beregnere klar til brug.</p>
+    </a>
+    <a href="interactive/animations.html" class="feature">
+      <div class="feature-icon">🎬</div>
+      <h3 data-da="Animationer" data-en="Animations">Animationer</h3>
+      <p data-da="Se hvordan tandhjulspumper, ventiler og cylindre arbejder i realtid." data-en="See gear pumps, valves and cylinders work in real time.">Se hvordan tandhjulspumper, ventiler og cylindre arbejder i realtid.</p>
+    </a>
+    <a href="interactive/circuit-sim.html" class="feature">
+      <div class="feature-icon">🔌</div>
+      <h3 data-da="Kredsløbssimulator" data-en="Circuit simulator">Kredsløbssimulator</h3>
+      <p data-da="Træk komponenter ind, forbind dem, og se olien flyde." data-en="Drag in components, connect them, watch the oil flow.">Træk komponenter ind, forbind dem, og se olien flyde.</p>
+    </a>
+    <a href="quizzes/symbols.html" class="feature">
+      <div class="feature-icon">📝</div>
+      <h3 data-da="Symbol-quiz" data-en="Symbol quiz">Symbol-quiz</h3>
+      <p data-da="Lær ISO-symboler gennem flashcards." data-en="Learn ISO symbols through flashcards.">Lær ISO-symboler gennem flashcards.</p>
+    </a>
+    <a href="interactive/troubleshooting.html" class="feature">
+      <div class="feature-icon">🛠️</div>
+      <h3 data-da="Fejlfinder" data-en="Troubleshooter">Fejlfinder</h3>
+      <p data-da="Beskriv symptomet, få mulige årsager. 70% af fejl skyldes olien." data-en="Describe the symptom, find causes. 70% of failures are oil-related.">Beskriv symptomet, få mulige årsager.</p>
+    </a>
+    <a href="interactive/formulas.html" class="feature">
+      <div class="feature-icon">📐</div>
+      <h3 data-da="Formelsamling" data-en="Formula reference">Formelsamling</h3>
+      <p data-da="Alle formler søgbare med eksempler og enhedsomregner." data-en="All formulas, searchable, with examples and converters.">Alle formler søgbare med eksempler og enhedsomregner.</p>
+    </a>
+  </div>
+</section>
+
+<section class="section section-about">
+  <div class="about-grid">
+    <div>
+      <span class="section-num">04</span>
+      <h2 data-da="Bygget på et solidt fundament" data-en="Built on a solid foundation">Bygget på et solidt fundament</h2>
+      <p data-da='Indholdet er baseret på den klassiske danske lærebog <em>"Hydraulik"</em> fra Erhvervsskolernes Forlag (2013), revideret af Kaj Holmegaard.' data-en='Content is based on the classic Danish textbook <em>"Hydraulik"</em> from Erhvervsskolernes Forlag (2013), revised by Kaj Holmegaard.'>Indholdet er baseret på den klassiske danske lærebog <em>"Hydraulik"</em>.</p>
+      <p data-da="Vi har taget bogens grundige teori og gjort den levende med animationer, interaktivitet og moderne webteknologi — frit tilgængeligt under Creative Commons." data-en="We've taken the book's thorough theory and brought it to life — freely available under Creative Commons.">Vi har taget bogens grundige teori og gjort den levende med animationer, interaktivitet og moderne webteknologi.</p>
+      <div class="about-credits">
+        <small data-da="Materialer fra:" data-en="Materials from:">Materialer fra:</small>
+        <div class="credits">
+          <span>Sauer-Danfoss</span><span>Hydac</span><span>Parker Hannifin</span><span>Bosch Rexroth</span>
+          <span>Hydra-Grene</span><span>C.C. Jensen</span><span>H.E.W.</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-quote">
+      <blockquote data-da='"Hydraulik forstår man ikke ved at læse — man forstår den ved at se den arbejde."' data-en='"You don\'t understand hydraulics by reading — you understand it by watching it work."'>"Hydraulik forstår man ikke ved at læse — man forstår den ved at se den arbejde."</blockquote>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="logo"><span class="logo-mark">⬢</span><span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span></div>
+      <p data-da="Frit interaktivt kursus i hydraulik på dansk og engelsk." data-en="Free interactive hydraulics course in Danish and English.">Frit interaktivt kursus i hydraulik på dansk og engelsk.</p>
+    </div>
+    <div>
+      <h4 data-da="Indhold" data-en="Content">Indhold</h4>
+      <a href="#moduler" data-da="12 moduler" data-en="12 modules">12 moduler</a>
+      <a href="interactive/calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+      <a href="interactive/circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+      <a href="quizzes/symbols.html" data-da="Quizzer" data-en="Quizzes">Quizzer</a>
+    </div>
+    <div>
+      <h4 data-da="Projekt" data-en="Project">Projekt</h4>
+      <a href="https://github.com/yourusername/hydraulik-course">GitHub</a>
+      <a href="CONTRIBUTING.md" data-da="Bidrag" data-en="Contribute">Bidrag</a>
+      <a href="LICENSE.md" data-da="Licens (CC BY-SA)" data-en="License (CC BY-SA)">Licens (CC BY-SA)</a>
+    </div>
+    <div>
+      <h4 data-da="Baseret på" data-en="Based on">Baseret på</h4>
+      <small>Hydraulik (2013)<br>Erhvervsskolernes Forlag<br>ISBN: 978-87-7082-333-3</small>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <small data-da="Indhold under CC BY-SA 4.0 · Kode under MIT" data-en="Content CC BY-SA 4.0 · Code MIT">Indhold under CC BY-SA 4.0 · Kode under MIT</small>
+  </div>
+</footer>
+
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

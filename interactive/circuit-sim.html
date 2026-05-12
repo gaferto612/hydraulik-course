@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kredsløbssimulator · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<style>
+  body { background: var(--bone); }
+  .sim-page { display: grid; grid-template-rows: auto 1fr auto; height: calc(100vh - 65px); }
+  .sim-header { padding: 1rem 2rem; background: var(--paper); border-bottom: var(--border); }
+  .sim-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 900; }
+  .sim-subtitle { font-family: var(--font-mono); font-size: 0.85rem; color: var(--steel); margin-top: 0.3rem; }
+
+  .sim-main { display: grid; grid-template-columns: 240px 1fr; gap: 0; overflow: hidden; }
+
+  .palette { background: var(--ink); color: var(--paper); padding: 1.5rem 1rem; overflow-y: auto; }
+  .palette h3 { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil); margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--graphite); }
+  .palette h3:not(:first-child) { margin-top: 1.5rem; }
+  .palette-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem; background: var(--graphite); border-radius: var(--radius); margin-bottom: 0.5rem; cursor: grab; transition: all 0.2s; user-select: none; }
+  .palette-item:hover { background: var(--steel); transform: translateX(3px); }
+  .palette-item:active { cursor: grabbing; }
+  .palette-item svg { width: 32px; height: 32px; flex-shrink: 0; }
+  .palette-item span { font-size: 0.8rem; font-family: var(--font-body); }
+
+  .canvas-wrap { position: relative; background: var(--paper); overflow: hidden; }
+  .canvas-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
+  #canvas { width: 100%; height: 100%; }
+
+  .canvas-toolbar { position: absolute; top: 1rem; right: 1rem; display: flex; gap: 0.5rem; z-index: 10; }
+  .tool-btn { padding: 0.5rem 0.9rem; background: var(--ink); color: var(--paper); border: none; border-radius: var(--radius); font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; }
+  .tool-btn:hover { background: var(--oil); }
+  .tool-btn.active { background: var(--oil); }
+  .tool-btn.danger:hover { background: var(--warning); }
+
+  .sim-footer { padding: 1rem 2rem; background: var(--ink); color: var(--paper); display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+  .sim-status { font-family: var(--font-mono); font-size: 0.85rem; }
+  .sim-status b { color: var(--oil-light); }
+  .sim-controls { margin-left: auto; display: flex; gap: 0.5rem; }
+  .sim-control-btn { padding: 0.5rem 1rem; background: var(--graphite); color: var(--paper); border: 1px solid var(--steel); border-radius: var(--radius); font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+  .sim-control-btn:hover { border-color: var(--oil); color: var(--oil-light); }
+  .sim-control-btn.primary { background: var(--oil); border-color: var(--oil); color: var(--paper); }
+  .sim-control-btn.primary:hover { background: var(--oil-dark); }
+
+  .help-panel { position: absolute; bottom: 1rem; left: 1rem; background: var(--white); border: var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; max-width: 320px; font-size: 0.85rem; box-shadow: var(--shadow-md); z-index: 5; }
+  .help-panel h4 { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--oil); margin-bottom: 0.5rem; }
+  .help-panel ul { list-style: none; padding: 0; }
+  .help-panel li { padding: 0.2rem 0; color: var(--steel); }
+  .help-panel kbd { font-family: var(--font-mono); background: var(--bone); border: 1px solid var(--concrete); border-radius: 3px; padding: 1px 6px; font-size: 0.75rem; margin-right: 0.4rem; }
+
+  .preset-list { display: flex; gap: 0.5rem; }
+  .preset-btn { padding: 0.4rem 0.8rem; background: var(--graphite); color: var(--paper); border: 1px solid var(--steel); border-radius: var(--radius); font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; }
+  .preset-btn:hover { border-color: var(--oil); }
+
+  @media (max-width: 800px) {
+    .sim-main { grid-template-columns: 1fr; }
+    .palette { display: flex; overflow-x: auto; padding: 0.8rem; }
+    .palette h3 { display: none; }
+    .palette-item { flex-shrink: 0; margin-right: 0.5rem; margin-bottom: 0; flex-direction: column; gap: 0.2rem; padding: 0.5rem; }
+    .palette-item span { font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="animations.html" data-da="Animationer" data-en="Animations">Animationer</a>
+    <a href="../quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<div class="sim-page">
+  <div class="sim-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap;">
+      <div>
+        <div class="sim-title" data-da="Kredsløbssimulator" data-en="Circuit Simulator">Kredsløbssimulator</div>
+        <div class="sim-subtitle" data-da="Træk komponenter ud · Klik mellem porte for at forbinde · Klik Start for at simulere"
+             data-en="Drag components out · Click between ports to connect · Click Start to simulate">
+          Træk komponenter ud · Klik mellem porte for at forbinde · Klik Start for at simulere
+        </div>
+      </div>
+      <div class="preset-list">
+        <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--steel); align-self: center;"
+              data-da="EKSEMPLER:" data-en="EXAMPLES:">EKSEMPLER:</span>
+        <button class="preset-btn" onclick="loadPreset('simple')" data-da="Simpelt kredsløb" data-en="Simple circuit">Simpelt kredsløb</button>
+        <button class="preset-btn" onclick="loadPreset('lifting')" data-da="Løftekredsløb" data-en="Lifting circuit">Løftekredsløb</button>
+        <button class="preset-btn" onclick="loadPreset('motor')" data-da="Motor-kredsløb" data-en="Motor circuit">Motor-kredsløb</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sim-main">
+    <aside class="palette">
+      <h3 data-da="Kilder" data-en="Sources">Kilder</h3>
+      <div class="palette-item" draggable="true" data-type="tank">
+        <svg viewBox="0 0 40 40"><line x1="10" y1="10" x2="10" y2="32" stroke="currentColor" stroke-width="2"/><line x1="10" y1="32" x2="30" y2="32" stroke="currentColor" stroke-width="2"/><line x1="30" y1="32" x2="30" y2="10" stroke="currentColor" stroke-width="2"/><line x1="20" y1="0" x2="20" y2="22" stroke="currentColor" stroke-width="2"/></svg>
+        <span data-da="Tank" data-en="Tank">Tank</span>
+      </div>
+      <div class="palette-item" draggable="true" data-type="pump">
+        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="2" fill="none"/><polygon points="20,10 26,20 14,20" fill="currentColor"/></svg>
+        <span data-da="Pumpe" data-en="Pump">Pumpe</span>
+      </div>
+
+      <h3 data-da="Aktuatorer" data-en="Actuators">Aktuatorer</h3>
+      <div class="palette-item" draggable="true" data-type="cylinder">
+        <svg viewBox="0 0 50 30"><rect x="5" y="8" width="32" height="14" stroke="currentColor" stroke-width="2" fill="none"/><line x1="22" y1="8" x2="22" y2="22" stroke="currentColor" stroke-width="2"/><line x1="22" y1="15" x2="45" y2="15" stroke="currentColor" stroke-width="2"/></svg>
+        <span data-da="Cylinder" data-en="Cylinder">Cylinder</span>
+      </div>
+      <div class="palette-item" draggable="true" data-type="motor">
+        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" stroke="currentColor" stroke-width="2" fill="none"/><polygon points="20,30 26,20 14,20" fill="currentColor"/></svg>
+        <span data-da="Motor" data-en="Motor">Motor</span>
+      </div>
+
+      <h3 data-da="Ventiler" data-en="Valves">Ventiler</h3>
+      <div class="palette-item" draggable="true" data-type="dcv">
+        <svg viewBox="0 0 50 30"><rect x="5" y="5" width="13" height="20" stroke="currentColor" stroke-width="2" fill="none"/><rect x="18" y="5" width="13" height="20" stroke="currentColor" stroke-width="2" fill="none"/><rect x="31" y="5" width="13" height="20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        <span data-da="4/3-ventil" data-en="4/3-valve">4/3-ventil</span>
+      </div>
+      <div class="palette-item" draggable="true" data-type="relief">
+        <svg viewBox="0 0 40 40"><rect x="12" y="12" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"/><line x1="20" y1="12" x2="20" y2="4" stroke="currentColor" stroke-width="2"/><line x1="20" y1="4" x2="26" y2="4" stroke="currentColor" stroke-width="2"/><path d="M 12 20 Q 20 15 28 20" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+        <span data-da="Trykbegrænser" data-en="Pressure relief">Trykbegrænser</span>
+      </div>
+      <div class="palette-item" draggable="true" data-type="check">
+        <svg viewBox="0 0 40 30"><line x1="5" y1="15" x2="14" y2="15" stroke="currentColor" stroke-width="2"/><polygon points="14,7 14,23 24,15" stroke="currentColor" stroke-width="2" fill="currentColor"/><circle cx="24" cy="15" r="2" stroke="currentColor" fill="white"/><line x1="26" y1="15" x2="35" y2="15" stroke="currentColor" stroke-width="2"/></svg>
+        <span data-da="Kontraventil" data-en="Check valve">Kontraventil</span>
+      </div>
+      <div class="palette-item" draggable="true" data-type="throttle">
+        <svg viewBox="0 0 40 30"><line x1="5" y1="15" x2="16" y2="15" stroke="currentColor" stroke-width="2"/><path d="M 16 8 Q 20 15 24 8" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M 16 22 Q 20 15 24 22" stroke="currentColor" stroke-width="1.5" fill="none"/><line x1="24" y1="15" x2="35" y2="15" stroke="currentColor" stroke-width="2"/></svg>
+        <span data-da="Drøvle" data-en="Throttle">Drøvle</span>
+      </div>
+
+      <h3 data-da="Måling" data-en="Measurement">Måling</h3>
+      <div class="palette-item" draggable="true" data-type="gauge">
+        <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="2" fill="none"/><line x1="20" y1="20" x2="27" y2="14" stroke="currentColor" stroke-width="1.5"/><circle cx="20" cy="20" r="1.5" fill="currentColor"/><line x1="20" y1="32" x2="20" y2="38" stroke="currentColor" stroke-width="2"/></svg>
+        <span data-da="Manometer" data-en="Pressure gauge">Manometer</span>
+      </div>
+    </aside>
+
+    <div class="canvas-wrap">
+      <div class="canvas-grid"></div>
+
+      <div class="canvas-toolbar">
+        <button class="tool-btn" id="connectBtn" onclick="toggleConnect()" data-da="🔗 Forbind" data-en="🔗 Connect">🔗 Forbind</button>
+        <button class="tool-btn danger" onclick="clearCanvas()" data-da="🗑 Ryd" data-en="🗑 Clear">🗑 Ryd</button>
+      </div>
+
+      <svg id="canvas" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#ff8c1a"/>
+          </marker>
+        </defs>
+        <g id="wires"></g>
+        <g id="components"></g>
+        <g id="ports"></g>
+      </svg>
+
+      <div class="help-panel">
+        <h4 data-da="Sådan bruges" data-en="How to use">Sådan bruges</h4>
+        <ul>
+          <li data-da="📦 Træk komponenter fra venstre side til lærredet" data-en="📦 Drag components from left to canvas">📦 Træk komponenter fra venstre side til lærredet</li>
+          <li data-da="🔗 Klik på 'Forbind', så klik på to porte (cirkler)" data-en="🔗 Click 'Connect', then click two ports (circles)">🔗 Klik på 'Forbind', så klik på to porte (cirkler)</li>
+          <li data-da="▶️ Tryk 'Start' for at simulere oliestrøm" data-en="▶️ Press 'Start' to simulate oil flow">▶️ Tryk 'Start' for at simulere oliestrøm</li>
+          <li data-da="🖱 Dobbeltklik komponent for at slette" data-en="🖱 Double-click component to delete">🖱 Dobbeltklik komponent for at slette</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sim-footer">
+    <div class="sim-status">
+      <span data-da="Status:" data-en="Status:">Status:</span>
+      <b id="statusText" data-da="Klar" data-en="Ready">Klar</b>
+    </div>
+    <div class="sim-status">
+      <span data-da="Komponenter:" data-en="Components:">Komponenter:</span>
+      <b id="compCount">0</b>
+    </div>
+    <div class="sim-status">
+      <span data-da="Forbindelser:" data-en="Connections:">Forbindelser:</span>
+      <b id="connCount">0</b>
+    </div>
+    <div class="sim-controls">
+      <button class="sim-control-btn" onclick="resetSim()" data-da="↺ Nulstil" data-en="↺ Reset">↺ Nulstil</button>
+      <button class="sim-control-btn primary" id="simBtn" onclick="toggleSim()" data-da="▶ Start" data-en="▶ Start">▶ Start</button>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script>
+// ====== Circuit Simulator ======
+const canvas = document.getElementById('canvas');
+const componentsG = document.getElementById('components');
+const wiresG = document.getElementById('wires');
+const portsG = document.getElementById('ports');
+
+let components = [];
+let connections = [];
+let nextId = 1;
+let connectMode = false;
+let pendingPort = null;
+let simulating = false;
+let simInterval = null;
+
+// Component definitions: ports as {x, y, type: 'in'|'out'|'bidir'}
+const COMPONENTS = {
+  tank: {
+    w: 80, h: 100,
+    ports: [{ x: 40, y: 0, type: 'in' }],
+    render: (g) => {
+      g.innerHTML = `
+        <rect x="0" y="0" width="80" height="100" fill="white" stroke="none"/>
+        <line x1="15" y1="20" x2="15" y2="85" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="15" y1="85" x2="65" y2="85" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="65" y1="85" x2="65" y2="20" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="40" y1="0" x2="40" y2="55" stroke="#1a1a1a" stroke-width="2.5"/>
+        <text x="40" y="100" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666">TANK</text>
+      `;
+    }
+  },
+  pump: {
+    w: 70, h: 70,
+    ports: [{ x: 35, y: 0, type: 'out' }, { x: 35, y: 70, type: 'in' }],
+    render: (g) => {
+      g.innerHTML = `
+        <circle cx="35" cy="35" r="25" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <polygon points="35,15 47,40 23,40" fill="#1a1a1a"/>
+        <text x="35" y="80" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666">PUMPE</text>
+      `;
+    }
+  },
+  motor: {
+    w: 70, h: 70,
+    ports: [{ x: 35, y: 0, type: 'in' }, { x: 35, y: 70, type: 'out' }],
+    render: (g) => {
+      g.innerHTML = `
+        <circle cx="35" cy="35" r="25" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <polygon points="35,55 47,30 23,30" fill="#1a1a1a"/>
+        <text x="35" y="80" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#666">MOTOR</text>
+      `;
+    }
+  },
+  cylinder: {
+    w: 110, h: 50,
+    ports: [{ x: 0, y: 25, type: 'in' }, { x: 110, y: 25, type: 'out' }],
+    render: (g) => {
+      g.innerHTML = `
+        <rect x="10" y="10" width="55" height="30" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="40" y1="10" x2="40" y2="40" stroke="#1a1a1a" stroke-width="3" class="piston"/>
+        <line x1="40" y1="25" x2="100" y2="25" stroke="#1a1a1a" stroke-width="3" class="piston-rod"/>
+        <text x="55" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#666">CYLINDER</text>
+      `;
+    }
+  },
+  dcv: {
+    w: 120, h: 60,
+    ports: [{ x: 0, y: 30, type: 'bidir' }, { x: 120, y: 30, type: 'bidir' }, { x: 30, y: 60, type: 'bidir' }, { x: 90, y: 60, type: 'bidir' }],
+    render: (g) => {
+      g.innerHTML = `
+        <rect x="5" y="10" width="33" height="35" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <rect x="43" y="10" width="33" height="35" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <rect x="81" y="10" width="33" height="35" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <text x="60" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#666">4/3-VENTIL</text>
+      `;
+    }
+  },
+  relief: {
+    w: 60, h: 80,
+    ports: [{ x: 30, y: 80, type: 'in' }, { x: 0, y: 40, type: 'out' }],
+    render: (g) => {
+      g.innerHTML = `
+        <rect x="15" y="20" width="30" height="35" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="30" y1="20" x2="30" y2="5" stroke="#1a1a1a" stroke-width="2"/>
+        <line x1="30" y1="5" x2="42" y2="5" stroke="#1a1a1a" stroke-width="2"/>
+        <path d="M 15 37 Q 30 30 45 37" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+        <text x="30" y="76" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666">PRV</text>
+      `;
+    }
+  },
+  check: {
+    w: 60, h: 40,
+    ports: [{ x: 0, y: 20, type: 'in' }, { x: 60, y: 20, type: 'out' }],
+    render: (g) => {
+      g.innerHTML = `
+        <line x1="0" y1="20" x2="15" y2="20" stroke="#1a1a1a" stroke-width="2.5"/>
+        <polygon points="15,8 15,32 35,20" stroke="#1a1a1a" stroke-width="2" fill="#1a1a1a"/>
+        <circle cx="35" cy="20" r="3" stroke="#1a1a1a" stroke-width="1.5" fill="white"/>
+        <line x1="38" y1="20" x2="60" y2="20" stroke="#1a1a1a" stroke-width="2.5"/>
+        <text x="30" y="40" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666">CHECK</text>
+      `;
+    }
+  },
+  throttle: {
+    w: 60, h: 40,
+    ports: [{ x: 0, y: 20, type: 'bidir' }, { x: 60, y: 20, type: 'bidir' }],
+    render: (g) => {
+      g.innerHTML = `
+        <line x1="0" y1="20" x2="20" y2="20" stroke="#1a1a1a" stroke-width="2.5"/>
+        <path d="M 20 10 Q 30 20 40 10" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+        <path d="M 20 30 Q 30 20 40 30" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+        <line x1="40" y1="20" x2="60" y2="20" stroke="#1a1a1a" stroke-width="2.5"/>
+        <text x="30" y="40" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666">DRØV</text>
+      `;
+    }
+  },
+  gauge: {
+    w: 50, h: 60,
+    ports: [{ x: 25, y: 60, type: 'in' }],
+    render: (g) => {
+      g.innerHTML = `
+        <circle cx="25" cy="25" r="20" fill="white" stroke="#1a1a1a" stroke-width="2.5"/>
+        <line x1="25" y1="25" x2="37" y2="15" stroke="#1a1a1a" stroke-width="1.5" class="needle"/>
+        <circle cx="25" cy="25" r="2" fill="#1a1a1a"/>
+        <line x1="25" y1="45" x2="25" y2="60" stroke="#1a1a1a" stroke-width="2"/>
+        <text x="25" y="60" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#666">P</text>
+      `;
+    }
+  },
+};
+
+// ====== Drag from palette ======
+document.querySelectorAll('.palette-item').forEach(item => {
+  item.addEventListener('dragstart', (e) => {
+    e.dataTransfer.setData('type', item.dataset.type);
+  });
+});
+
+const canvasWrap = document.querySelector('.canvas-wrap');
+canvasWrap.addEventListener('dragover', (e) => e.preventDefault());
+canvasWrap.addEventListener('drop', (e) => {
+  e.preventDefault();
+  const type = e.dataTransfer.getData('type');
+  if (!type || !COMPONENTS[type]) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left - COMPONENTS[type].w / 2;
+  const y = e.clientY - rect.top - COMPONENTS[type].h / 2;
+  addComponent(type, x, y);
+});
+
+function addComponent(type, x, y) {
+  const def = COMPONENTS[type];
+  const id = nextId++;
+  const comp = { id, type, x, y, def };
+  components.push(comp);
+  renderComponent(comp);
+  renderPorts();
+  updateStatus();
+}
+
+function renderComponent(comp) {
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('class', 'comp');
+  g.setAttribute('data-id', comp.id);
+  g.setAttribute('transform', `translate(${comp.x}, ${comp.y})`);
+  g.style.cursor = 'move';
+  comp.def.render(g);
+  componentsG.appendChild(g);
+  comp.el = g;
+
+  // Make draggable
+  let dragOffset = null;
+  g.addEventListener('mousedown', (e) => {
+    if (connectMode) return;
+    const rect = canvas.getBoundingClientRect();
+    dragOffset = { x: e.clientX - rect.left - comp.x, y: e.clientY - rect.top - comp.y };
+    g.style.cursor = 'grabbing';
+  });
+  document.addEventListener('mousemove', (e) => {
+    if (!dragOffset) return;
+    const rect = canvas.getBoundingClientRect();
+    comp.x = e.clientX - rect.left - dragOffset.x;
+    comp.y = e.clientY - rect.top - dragOffset.y;
+    g.setAttribute('transform', `translate(${comp.x}, ${comp.y})`);
+    renderPorts();
+    renderWires();
+  });
+  document.addEventListener('mouseup', () => {
+    if (dragOffset) g.style.cursor = 'move';
+    dragOffset = null;
+  });
+  // Double-click to delete
+  g.addEventListener('dblclick', () => deleteComponent(comp.id));
+}
+
+function deleteComponent(id) {
+  components = components.filter(c => c.id !== id);
+  connections = connections.filter(c => c.from.compId !== id && c.to.compId !== id);
+  document.querySelectorAll(`[data-id="${id}"]`).forEach(el => el.remove());
+  renderPorts();
+  renderWires();
+  updateStatus();
+}
+
+function renderPorts() {
+  portsG.innerHTML = '';
+  components.forEach(comp => {
+    comp.def.ports.forEach((port, idx) => {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', comp.x + port.x);
+      c.setAttribute('cy', comp.y + port.y);
+      c.setAttribute('r', 6);
+      c.setAttribute('fill', '#ff8c1a');
+      c.setAttribute('stroke', '#1a1a1a');
+      c.setAttribute('stroke-width', '2');
+      c.style.cursor = connectMode ? 'crosshair' : 'default';
+      c.style.opacity = connectMode ? 1 : 0.4;
+      c.dataset.compId = comp.id;
+      c.dataset.portIdx = idx;
+      c.addEventListener('click', () => clickPort(comp.id, idx));
+      portsG.appendChild(c);
+    });
+  });
+}
+
+function clickPort(compId, portIdx) {
+  if (!connectMode) return;
+  if (!pendingPort) {
+    pendingPort = { compId, portIdx };
+    // Highlight
+    portsG.querySelectorAll('circle').forEach(c => {
+      if (c.dataset.compId == compId && c.dataset.portIdx == portIdx) {
+        c.setAttribute('fill', '#5fb3d4');
+        c.setAttribute('r', 8);
+      }
+    });
+  } else {
+    if (pendingPort.compId === compId && pendingPort.portIdx === portIdx) {
+      pendingPort = null;
+      renderPorts();
+      return;
+    }
+    // Create connection
+    connections.push({
+      from: pendingPort,
+      to: { compId, portIdx }
+    });
+    pendingPort = null;
+    renderPorts();
+    renderWires();
+    updateStatus();
+  }
+}
+
+function renderWires() {
+  wiresG.innerHTML = '';
+  connections.forEach(conn => {
+    const fromComp = components.find(c => c.id === conn.from.compId);
+    const toComp = components.find(c => c.id === conn.to.compId);
+    if (!fromComp || !toComp) return;
+    const fromPort = fromComp.def.ports[conn.from.portIdx];
+    const toPort = toComp.def.ports[conn.to.portIdx];
+    const x1 = fromComp.x + fromPort.x;
+    const y1 = fromComp.y + fromPort.y;
+    const x2 = toComp.x + toPort.x;
+    const y2 = toComp.y + toPort.y;
+
+    // L-shaped or curved path
+    const midX = (x1 + x2) / 2;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const d = `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`;
+    path.setAttribute('d', d);
+    path.setAttribute('stroke', simulating ? '#ff8c1a' : '#1a1a1a');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('fill', 'none');
+    if (simulating) {
+      path.setAttribute('stroke-dasharray', '10 5');
+      path.style.animation = 'flowDash 1s linear infinite';
+    }
+    wiresG.appendChild(path);
+  });
+}
+
+function toggleConnect() {
+  connectMode = !connectMode;
+  pendingPort = null;
+  document.getElementById('connectBtn').classList.toggle('active', connectMode);
+  renderPorts();
+}
+
+function clearCanvas() {
+  if (components.length && !confirm('Slet alle komponenter og forbindelser?')) return;
+  components = []; connections = [];
+  componentsG.innerHTML = ''; wiresG.innerHTML = ''; portsG.innerHTML = '';
+  updateStatus();
+}
+
+function updateStatus() {
+  document.getElementById('compCount').textContent = components.length;
+  document.getElementById('connCount').textContent = connections.length;
+}
+
+function toggleSim() {
+  simulating = !simulating;
+  const btn = document.getElementById('simBtn');
+  if (simulating) {
+    btn.textContent = '⏸ Stop';
+    document.getElementById('statusText').textContent = 'Simulerer · ' + connections.length + ' forbindelser';
+    animateSimulation();
+  } else {
+    btn.textContent = '▶ Start';
+    document.getElementById('statusText').textContent = 'Klar';
+    if (simInterval) clearInterval(simInterval);
+  }
+  renderWires();
+}
+
+function animateSimulation() {
+  let t = 0;
+  simInterval = setInterval(() => {
+    if (!simulating) { clearInterval(simInterval); return; }
+    t += 0.1;
+    // Animate pump rotation
+    components.forEach(c => {
+      if (c.type === 'pump' || c.type === 'motor') {
+        const inner = c.el.querySelector('polygon');
+        if (inner) inner.setAttribute('transform', `rotate(${t * 100} 35 35)`);
+      }
+      if (c.type === 'cylinder') {
+        const piston = c.el.querySelector('.piston');
+        const rod = c.el.querySelector('.piston-rod');
+        if (piston && rod) {
+          const offset = 15 * Math.sin(t * 1.5);
+          piston.setAttribute('x1', 40 + offset);
+          piston.setAttribute('x2', 40 + offset);
+          rod.setAttribute('x1', 40 + offset);
+        }
+      }
+      if (c.type === 'gauge') {
+        const needle = c.el.querySelector('.needle');
+        if (needle) {
+          const angle = 30 + 60 * Math.abs(Math.sin(t));
+          const rad = (angle - 90) * Math.PI / 180;
+          needle.setAttribute('x2', 25 + 14 * Math.cos(rad));
+          needle.setAttribute('y2', 25 + 14 * Math.sin(rad));
+        }
+      }
+    });
+  }, 50);
+}
+
+function resetSim() {
+  if (simulating) toggleSim();
+  components.forEach(c => {
+    if (c.type === 'pump' || c.type === 'motor') {
+      const inner = c.el.querySelector('polygon');
+      if (inner) inner.removeAttribute('transform');
+    }
+    if (c.type === 'cylinder') {
+      const piston = c.el.querySelector('.piston');
+      const rod = c.el.querySelector('.piston-rod');
+      if (piston) { piston.setAttribute('x1', 40); piston.setAttribute('x2', 40); }
+      if (rod) rod.setAttribute('x1', 40);
+    }
+  });
+}
+
+// ====== Presets ======
+function loadPreset(name) {
+  clearCanvas();
+  const presets = {
+    simple: [
+      { type: 'tank', x: 50, y: 250 },
+      { type: 'pump', x: 200, y: 220 },
+      { type: 'relief', x: 320, y: 200 },
+      { type: 'gauge', x: 450, y: 200 },
+    ],
+    lifting: [
+      { type: 'tank', x: 50, y: 280 },
+      { type: 'pump', x: 200, y: 250 },
+      { type: 'relief', x: 320, y: 230 },
+      { type: 'dcv', x: 450, y: 230 },
+      { type: 'cylinder', x: 620, y: 130 },
+    ],
+    motor: [
+      { type: 'tank', x: 50, y: 280 },
+      { type: 'pump', x: 200, y: 250 },
+      { type: 'relief', x: 320, y: 230 },
+      { type: 'throttle', x: 450, y: 250 },
+      { type: 'motor', x: 580, y: 250 },
+    ],
+  };
+  const preset = presets[name];
+  if (!preset) return;
+  preset.forEach(p => addComponent(p.type, p.x, p.y));
+
+  // Auto-connect simple chain
+  setTimeout(() => {
+    for (let i = 0; i < components.length - 1; i++) {
+      const a = components[i];
+      const b = components[i + 1];
+      // Find best matching ports (out-then-in)
+      const outIdx = a.def.ports.findIndex(p => p.type === 'out' || p.type === 'bidir');
+      const inIdx = b.def.ports.findIndex(p => p.type === 'in' || p.type === 'bidir');
+      if (outIdx >= 0 && inIdx >= 0) {
+        connections.push({ from: { compId: a.id, portIdx: outIdx }, to: { compId: b.id, portIdx: inIdx } });
+      }
+    }
+    renderWires();
+    updateStatus();
+  }, 100);
+}
+
+// CSS animation for flow
+const style = document.createElement('style');
+style.textContent = `@keyframes flowDash { to { stroke-dashoffset: -15; } }`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>

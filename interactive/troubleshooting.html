@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fejlfinding · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/module.css">
+<style>
+  .ts-page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
+  .symptom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 2rem 0; }
+  .symptom-card { background: var(--white); border: 2px solid var(--concrete); border-radius: var(--radius); padding: 1.2rem; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+  .symptom-card:hover { border-color: var(--oil); transform: translateY(-2px); }
+  .symptom-card.active { border-color: var(--oil); background: rgba(255, 140, 26, 0.1); }
+  .symptom-card .icon { font-size: 2rem; margin-bottom: 0.5rem; display: block; }
+  .symptom-card h4 { font-family: var(--font-display); font-size: 1.1rem; }
+  .symptom-card p { font-size: 0.85rem; color: var(--steel); margin-top: 0.3rem; }
+  .diagnosis { background: var(--ink); color: var(--paper); padding: 2rem; border-radius: var(--radius); margin-top: 2rem; display: none; }
+  .diagnosis.show { display: block; }
+  .diagnosis h3 { color: var(--oil-light); font-family: var(--font-display); margin-bottom: 1rem; }
+  .cause { background: var(--graphite); padding: 1rem 1.2rem; border-radius: var(--radius); margin-bottom: 0.8rem; border-left: 3px solid var(--oil); }
+  .cause-name { font-weight: 700; font-family: var(--font-mono); font-size: 0.9rem; color: var(--oil-light); margin-bottom: 0.4rem; }
+  .cause-prob { font-family: var(--font-mono); font-size: 0.75rem; color: var(--bone); float: right; padding: 0.1rem 0.5rem; background: var(--steel); border-radius: 3px; }
+  .cause-action { font-size: 0.9rem; color: var(--bone); }
+  .ts-stat-box { display: flex; gap: 2rem; padding: 1.5rem 2rem; background: var(--bone); border-radius: var(--radius); margin: 2rem 0; }
+  .ts-stat-box .ts-num { font-family: var(--font-display); font-size: 2.5rem; font-weight: 900; color: var(--oil); }
+  .ts-stat-box .ts-label { font-size: 0.9rem; color: var(--steel); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="../quizzes/symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<div class="ts-page">
+  <div class="module-breadcrumb">
+    <a href="../index.html">Hjem</a> <span>/</span> <span data-da="Fejlfinding" data-en="Troubleshooting">Fejlfinding</span>
+  </div>
+  <h1 style="font-family: var(--font-display); font-size: 3rem; font-weight: 900; margin-bottom: 1rem;"
+      data-da="Hydraulisk fejlfinding" data-en="Hydraulic troubleshooting">Hydraulisk fejlfinding</h1>
+  <p style="font-size: 1.15rem; color: var(--steel);"
+     data-da="Vælg symptomet og få de mest sandsynlige årsager med løsningsforslag."
+     data-en="Select the symptom and get the most likely causes with suggested solutions.">
+    Vælg symptomet og få de mest sandsynlige årsager med løsningsforslag.
+  </p>
+
+  <div class="ts-stat-box">
+    <div>
+      <div class="ts-num">70%</div>
+      <div class="ts-label" data-da="af hydrauliske fejl skyldes olien" data-en="of hydraulic failures are oil-related">af hydrauliske fejl skyldes olien</div>
+    </div>
+    <div>
+      <div class="ts-num">85%</div>
+      <div class="ts-label" data-da="undgås med planlagt vedligehold" data-en="prevented by planned maintenance">undgås med planlagt vedligehold</div>
+    </div>
+  </div>
+
+  <h2 data-da="Hvad er symptomet?" data-en="What's the symptom?">Hvad er symptomet?</h2>
+  <div class="symptom-grid" id="symptomGrid"></div>
+
+  <div class="diagnosis" id="diagnosis">
+    <h3 id="diagnosisTitle"></h3>
+    <div id="causesList"></div>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script>
+const symptoms = [
+  {
+    id: 'noise',
+    icon: '🔊',
+    title: { da: 'Pumpestøj', en: 'Pump noise' },
+    desc: { da: 'Pumpen larmer eller hviner', en: 'Pump is loud or whining' },
+    causes: [
+      { name: { da: 'Luft i olien (kavitation)', en: 'Air in oil (cavitation)' }, prob: 'Høj', action: { da: 'Tjek sugeledning for utætheder · sænk oliehastighed på sugesiden · efterfyld med olie til korrekt niveau', en: 'Check suction line for leaks · reduce suction velocity · top up oil to correct level' } },
+      { name: { da: 'Tilstoppet sugefilter', en: 'Clogged suction filter' }, prob: 'Høj', action: { da: 'Udskift sugefilter · tjek vakuummeter på sugesiden', en: 'Replace suction filter · check vacuum gauge on suction side' } },
+      { name: { da: 'Slidt pumpe', en: 'Worn pump' }, prob: 'Middel', action: { da: 'Mål volumetrisk virkningsgrad · skift pumpen hvis under 80%', en: 'Measure volumetric efficiency · replace if below 80%' } },
+      { name: { da: 'Forkert koblingsindstilling', en: 'Misaligned coupling' }, prob: 'Lav', action: { da: 'Kontrollér akselopretning · tjek for vibrationer', en: 'Check shaft alignment · check for vibration' } },
+    ]
+  },
+  {
+    id: 'heat',
+    icon: '🔥',
+    title: { da: 'Olie bliver for varm', en: 'Oil overheating' },
+    desc: { da: 'Olietemp. over 70°C', en: 'Oil temp above 70°C' },
+    causes: [
+      { name: { da: 'Internt læk i system', en: 'Internal system leak' }, prob: 'Høj', action: { da: 'Lokalisér via deltablads-metoden · skift pakninger eller patroner', en: 'Locate via delta-T method · replace seals or cartridges' } },
+      { name: { da: 'For lille olietank', en: 'Undersized tank' }, prob: 'Middel', action: { da: 'Mål olievolumen vs. pumpekapacitet · stationær: 3-5×, mobil: 0,5-1,5× (l/min)', en: 'Measure oil volume vs pump capacity · stationary: 3-5×, mobile: 0.5-1.5× (l/min)' } },
+      { name: { da: 'Defekt køler', en: 'Faulty cooler' }, prob: 'Middel', action: { da: 'Rens køleribber · kontrollér ventilatorfunktion · tjek vandtemperatur (vandkølet)', en: 'Clean cooling fins · check fan function · check water temp (water-cooled)' } },
+      { name: { da: 'For lav viskositet', en: 'Viscosity too low' }, prob: 'Lav', action: { da: 'Tag olieprøve · skift til korrekt ISO VG-grad', en: 'Take oil sample · change to correct ISO VG grade' } },
+    ]
+  },
+  {
+    id: 'slow',
+    icon: '🐢',
+    title: { da: 'Langsom bevægelse', en: 'Slow movement' },
+    desc: { da: 'Cylinder eller motor er langsom', en: 'Cylinder or motor running slowly' },
+    causes: [
+      { name: { da: 'Internt læk i ventil eller cylinder', en: 'Internal leak in valve or cylinder' }, prob: 'Høj', action: { da: 'Stop strømmen og mål tryktab · skift slidte komponenter', en: 'Block flow and measure pressure drop · replace worn components' } },
+      { name: { da: 'For lav pumpekapacitet', en: 'Low pump capacity' }, prob: 'Middel', action: { da: 'Mål flow med flowmåler · slidt pumpe → udskift', en: 'Measure flow with flow meter · worn pump → replace' } },
+      { name: { da: 'Drøvle indstillet for lavt', en: 'Throttle set too low' }, prob: 'Middel', action: { da: 'Justér drøvlen op til ønsket hastighed', en: 'Adjust throttle up to desired speed' } },
+      { name: { da: 'Trykbegrænser indstillet for lavt', en: 'Relief valve set too low' }, prob: 'Lav', action: { da: 'Mål systemtryk · justér trykbegrænser', en: 'Measure system pressure · adjust relief valve' } },
+    ]
+  },
+  {
+    id: 'jerky',
+    icon: '⚡',
+    title: { da: 'Rykvise bevægelser', en: 'Jerky movement' },
+    desc: { da: 'Cylinder bevæger sig hakkende', en: 'Cylinder moves in jerks' },
+    causes: [
+      { name: { da: 'Luft i systemet', en: 'Air in system' }, prob: 'Høj', action: { da: 'Udluft cylinderen · kør cylinderen til endestop flere gange', en: 'Bleed the cylinder · cycle cylinder to end-stops several times' } },
+      { name: { da: 'Stick-slip pga. dårlige pakninger', en: 'Stick-slip from poor seals' }, prob: 'Middel', action: { da: 'Skift pakninger · brug korrekt pakningstype', en: 'Replace seals · use correct seal type' } },
+      { name: { da: 'For lavt tryk', en: 'Pressure too low' }, prob: 'Lav', action: { da: 'Tjek trykbegrænser og pumpekapacitet', en: 'Check relief valve and pump capacity' } },
+    ]
+  },
+  {
+    id: 'leak',
+    icon: '💧',
+    title: { da: 'Eksternt læk', en: 'External leak' },
+    desc: { da: 'Olie drypper eller siver', en: 'Oil dripping or seeping' },
+    causes: [
+      { name: { da: 'Slidte stempelstangs-pakninger', en: 'Worn rod seals' }, prob: 'Høj', action: { da: 'Skift komplet pakningssæt · tjek for ridser i stang', en: 'Replace complete seal kit · check for rod scratches' } },
+      { name: { da: 'Løse fittings', en: 'Loose fittings' }, prob: 'Middel', action: { da: 'Spænd alle samlinger med korrekt moment', en: 'Tighten all connections to correct torque' } },
+      { name: { da: 'Beskadiget slange', en: 'Damaged hose' }, prob: 'Middel', action: { da: 'Inspektion for revner, blære, gnav · udskift omgående', en: 'Inspect for cracks, blistering, abrasion · replace immediately' } },
+    ]
+  },
+  {
+    id: 'noaction',
+    icon: '🚫',
+    title: { da: 'Ingen funktion', en: 'No function' },
+    desc: { da: 'Systemet reagerer ikke', en: 'System unresponsive' },
+    causes: [
+      { name: { da: 'Pumpe driver ikke (kobling)', en: 'Pump not running (coupling)' }, prob: 'Høj', action: { da: 'Tjek motor kører · tjek koblingsbrud', en: 'Check motor running · check coupling failure' } },
+      { name: { da: 'Solenoide defekt', en: 'Faulty solenoid' }, prob: 'Middel', action: { da: 'Mål spændingen ved solenoiden · mål spolemodstand', en: 'Measure voltage at solenoid · measure coil resistance' } },
+      { name: { da: 'Trykbegrænser åben', en: 'Relief valve stuck open' }, prob: 'Middel', action: { da: 'Rens eller skift trykbegrænser · check fjederen', en: 'Clean or replace relief · check spring' } },
+      { name: { da: 'Filter tilstoppet (bypass)', en: 'Filter clogged (bypass)' }, prob: 'Lav', action: { da: 'Tjek filter-indikator · skift filter', en: 'Check filter indicator · replace filter' } },
+    ]
+  },
+];
+
+function render() {
+  const lang = (window.HydraulikI18n && window.HydraulikI18n.getLang()) || 'da';
+  const grid = document.getElementById('symptomGrid');
+  grid.innerHTML = '';
+  symptoms.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'symptom-card';
+    card.innerHTML = `
+      <span class="icon">${s.icon}</span>
+      <h4>${s.title[lang]}</h4>
+      <p>${s.desc[lang]}</p>
+    `;
+    card.addEventListener('click', () => showDiagnosis(s, card));
+    grid.appendChild(card);
+  });
+}
+
+function showDiagnosis(symptom, card) {
+  document.querySelectorAll('.symptom-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  const lang = (window.HydraulikI18n && window.HydraulikI18n.getLang()) || 'da';
+  const probLabels = { da: { 'Høj': 'Høj', 'Middel': 'Middel', 'Lav': 'Lav' }, en: { 'Høj': 'High', 'Middel': 'Medium', 'Lav': 'Low' } };
+  const titleText = { da: 'Mulige årsager — ', en: 'Possible causes — ' };
+  document.getElementById('diagnosisTitle').textContent = titleText[lang] + symptom.title[lang];
+  const list = document.getElementById('causesList');
+  list.innerHTML = '';
+  symptom.causes.forEach(cause => {
+    const div = document.createElement('div');
+    div.className = 'cause';
+    div.innerHTML = `
+      <div class="cause-name">${cause.name[lang]} <span class="cause-prob">${probLabels[lang][cause.prob]}</span></div>
+      <div class="cause-action">${cause.action[lang]}</div>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('diagnosis').classList.add('show');
+  document.getElementById('diagnosis').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+render();
+// Re-render on language change
+if (window.HydraulikI18n && window.HydraulikI18n.onChange) {
+  window.HydraulikI18n.onChange(() => render());
+}
+</script>
+</body>
+</html>

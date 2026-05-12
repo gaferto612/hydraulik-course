@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symbol-quiz · Hydraulik Kursus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/module.css">
+<style>
+  .quiz-page { max-width: 800px; margin: 0 auto; padding: 4rem 2rem; }
+  .quiz-stats { display: flex; justify-content: space-around; padding: 1rem 1.5rem; background: var(--bone); border-radius: var(--radius); margin-bottom: 2rem; font-family: var(--font-mono); }
+  .quiz-stats div { text-align: center; }
+  .quiz-stats b { display: block; font-size: 1.8rem; color: var(--oil); }
+  .flashcard { background: var(--white); border: 2px solid var(--ink); border-radius: var(--radius); padding: 3rem; margin-bottom: 2rem; text-align: center; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+  .flashcard-svg { width: 200px; height: 200px; margin-bottom: 2rem; }
+  .flashcard-svg svg { width: 100%; height: 100%; }
+  .flashcard h2 { font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 2rem; }
+  .answer-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; max-width: 500px; }
+  .answer-btn { padding: 1rem; background: var(--bone); border: 2px solid var(--concrete); border-radius: var(--radius); font-family: var(--font-body); font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+  .answer-btn:hover { background: rgba(255, 140, 26, 0.1); border-color: var(--oil); }
+  .answer-btn.correct { background: rgba(127, 201, 127, 0.2); border-color: #7fc97f; }
+  .answer-btn.incorrect { background: rgba(212, 57, 46, 0.1); border-color: var(--warning); }
+  .next-btn { margin-top: 1.5rem; }
+  .progress-dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 2rem; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--concrete); }
+  .dot.done { background: #7fc97f; }
+  .dot.current { background: var(--oil); transform: scale(1.5); }
+  .dot.wrong { background: var(--warning); }
+  .symbol-svg { stroke: #1a1a1a; stroke-width: 2; fill: none; }
+  .quiz-done { text-align: center; padding: 3rem; background: var(--ink); color: var(--paper); border-radius: var(--radius); }
+  .quiz-done h2 { font-family: var(--font-display); font-size: 2.5rem; margin-bottom: 1rem; color: var(--oil-light); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="../index.html" class="logo">
+    <span class="logo-mark">⬢</span>
+    <span class="logo-text">HYDRAULIK<span class="logo-dot">.</span>kursus</span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html#moduler" data-da="Moduler" data-en="Modules">Moduler</a>
+    <a href="../interactive/calculators.html" data-da="Beregnere" data-en="Calculators">Beregnere</a>
+    <a href="../interactive/animations.html" data-da="Animationer" data-en="Animations">Animationer</a>
+    <a href="../interactive/circuit-sim.html" data-da="Simulator" data-en="Simulator">Simulator</a>
+    <a href="symbols.html" data-da="Quiz" data-en="Quiz">Quiz</a>
+  </div>
+</nav>
+
+<div class="quiz-page">
+  <div class="module-breadcrumb">
+    <a href="../index.html" data-da="Hjem" data-en="Home">Hjem</a> <span>/</span>
+    <span data-da="Quiz" data-en="Quiz">Quiz</span> <span>/</span>
+    <span data-da="ISO-symboler" data-en="ISO symbols">ISO-symboler</span>
+  </div>
+  <h1 style="font-family: var(--font-display); font-size: 3rem; font-weight: 900; margin-bottom: 1rem;"
+      data-da="ISO-symboler" data-en="ISO symbols">ISO-symboler</h1>
+  <p style="font-size: 1.15rem; color: var(--steel); margin-bottom: 2.5rem;"
+     data-da="Lær de almindelige hydrauliske symboler gennem flashcards. Hvert symbol vises — vælg det rigtige navn."
+     data-en="Learn the common hydraulic symbols via flashcards. Each symbol is shown — pick the right name.">
+    Lær de almindelige hydrauliske symboler gennem flashcards.
+  </p>
+
+  <div class="quiz-stats">
+    <div><b id="statCorrect">0</b><small data-da="Rigtige" data-en="Correct">Rigtige</small></div>
+    <div><b id="statWrong">0</b><small data-da="Forkerte" data-en="Wrong">Forkerte</small></div>
+    <div><b id="statRemaining">10</b><small data-da="Tilbage" data-en="Remaining">Tilbage</small></div>
+  </div>
+
+  <div class="progress-dots" id="progressDots"></div>
+
+  <div id="flashcardContainer">
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-svg" id="flashSvg"></div>
+      <h2 data-da="Hvilket symbol er dette?" data-en="What symbol is this?">Hvilket symbol er dette?</h2>
+      <div class="answer-options" id="options"></div>
+    </div>
+  </div>
+
+  <div id="quizDone" class="quiz-done" style="display:none">
+    <h2 id="doneTitle">🎉 Færdig!</h2>
+    <p id="doneText" style="font-size: 1.2rem; margin-bottom: 2rem;"></p>
+    <button onclick="startQuiz()" class="btn btn-primary" data-da="Prøv igen" data-en="Try again">Prøv igen</button>
+    <a href="../index.html" class="btn btn-secondary" data-da="Hjem" data-en="Home">Hjem</a>
+  </div>
+</div>
+
+<script src="../assets/js/i18n.js"></script>
+<script>
+const LANG = () => (window.HydraulikI18n && window.HydraulikI18n.getLang && window.HydraulikI18n.getLang()) || 'da';
+
+const symbols = [
+  { name: { da: 'Manometer', en: 'Pressure gauge' }, svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" class="symbol-svg"/><line x1="50" y1="50" x2="70" y2="35" class="symbol-svg"/><circle cx="50" cy="50" r="3" fill="#1a1a1a"/><line x1="50" y1="85" x2="50" y2="95" class="symbol-svg"/></svg>' },
+  { name: { da: 'Filter', en: 'Filter' }, svg: '<svg viewBox="0 0 100 100"><polygon points="20,30 80,30 50,70 20,30" class="symbol-svg"/><line x1="20" y1="50" x2="80" y2="50" class="symbol-svg" stroke-dasharray="3"/><line x1="10" y1="50" x2="20" y2="50" class="symbol-svg"/><line x1="80" y1="50" x2="90" y2="50" class="symbol-svg"/></svg>' },
+  { name: { da: 'Tank', en: 'Reservoir' }, svg: '<svg viewBox="0 0 100 100"><line x1="30" y1="30" x2="30" y2="80" class="symbol-svg"/><line x1="30" y1="80" x2="70" y2="80" class="symbol-svg"/><line x1="70" y1="80" x2="70" y2="30" class="symbol-svg"/><line x1="50" y1="10" x2="50" y2="55" class="symbol-svg"/></svg>' },
+  { name: { da: 'Pumpe (fast fortrængning)', en: 'Fixed-displacement pump' }, svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" class="symbol-svg"/><polygon points="50,25 60,50 40,50" fill="#1a1a1a"/><line x1="50" y1="20" x2="50" y2="10" class="symbol-svg"/><line x1="50" y1="80" x2="50" y2="90" class="symbol-svg"/></svg>' },
+  { name: { da: 'Variabel pumpe', en: 'Variable pump' }, svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" class="symbol-svg"/><polygon points="50,25 60,50 40,50" fill="#1a1a1a"/><line x1="20" y1="80" x2="80" y2="20" class="symbol-svg" stroke="#ff8c1a" stroke-width="3"/></svg>' },
+  { name: { da: 'Hydraulisk motor', en: 'Hydraulic motor' }, svg: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" class="symbol-svg"/><polygon points="50,75 60,50 40,50" fill="#1a1a1a"/><line x1="50" y1="20" x2="50" y2="10" class="symbol-svg"/><line x1="50" y1="80" x2="50" y2="90" class="symbol-svg"/></svg>' },
+  { name: { da: 'Enkeltvirkende cylinder', en: 'Single-acting cylinder' }, svg: '<svg viewBox="0 0 120 80"><rect x="10" y="20" width="80" height="40" class="symbol-svg"/><line x1="50" y1="20" x2="50" y2="60" class="symbol-svg" stroke-width="3"/><line x1="50" y1="40" x2="110" y2="40" class="symbol-svg" stroke-width="3"/><line x1="10" y1="65" x2="20" y2="75" class="symbol-svg"/></svg>' },
+  { name: { da: 'Dobbeltvirkende cylinder', en: 'Double-acting cylinder' }, svg: '<svg viewBox="0 0 120 80"><rect x="10" y="20" width="80" height="40" class="symbol-svg"/><line x1="50" y1="20" x2="50" y2="60" class="symbol-svg" stroke-width="3"/><line x1="50" y1="40" x2="110" y2="40" class="symbol-svg" stroke-width="3"/></svg>' },
+  { name: { da: 'Trykbegrænsningsventil', en: 'Pressure relief valve' }, svg: '<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" class="symbol-svg"/><line x1="50" y1="30" x2="50" y2="10" class="symbol-svg"/><line x1="50" y1="10" x2="60" y2="10" class="symbol-svg"/><path d="M 30 50 Q 50 35 70 50" class="symbol-svg" fill="none"/><polygon points="30,50 35,45 35,55" fill="#1a1a1a"/></svg>' },
+  { name: { da: 'Kontraventil', en: 'Check valve' }, svg: '<svg viewBox="0 0 100 60"><line x1="10" y1="30" x2="35" y2="30" class="symbol-svg"/><polygon points="35,15 35,45 60,30" class="symbol-svg" fill="#1a1a1a"/><circle cx="60" cy="30" r="5" class="symbol-svg" fill="white"/><line x1="65" y1="30" x2="90" y2="30" class="symbol-svg"/></svg>' },
+  { name: { da: '4/3-retningsventil', en: '4/3 directional valve' }, svg: '<svg viewBox="0 0 150 80"><rect x="10" y="20" width="40" height="40" class="symbol-svg"/><rect x="55" y="20" width="40" height="40" class="symbol-svg"/><rect x="100" y="20" width="40" height="40" class="symbol-svg"/><line x1="75" y1="20" x2="75" y2="60" class="symbol-svg"/><line x1="75" y1="35" x2="65" y2="35" class="symbol-svg"/><line x1="75" y1="45" x2="85" y2="45" class="symbol-svg"/></svg>' },
+  { name: { da: 'Akkumulator', en: 'Accumulator' }, svg: '<svg viewBox="0 0 60 100"><rect x="20" y="10" width="20" height="60" class="symbol-svg" rx="10"/><line x1="20" y1="40" x2="40" y2="40" class="symbol-svg" stroke-dasharray="2"/><line x1="30" y1="70" x2="30" y2="90" class="symbol-svg"/></svg>' },
+  { name: { da: 'Drøvle (justerbar)', en: 'Throttle (adjustable)' }, svg: '<svg viewBox="0 0 100 60"><line x1="10" y1="30" x2="40" y2="30" class="symbol-svg"/><path d="M 40 20 Q 50 30 60 20" class="symbol-svg" fill="none"/><path d="M 40 40 Q 50 30 60 40" class="symbol-svg" fill="none"/><line x1="60" y1="30" x2="90" y2="30" class="symbol-svg"/><line x1="50" y1="10" x2="50" y2="50" class="symbol-svg" stroke="#ff8c1a" stroke-width="2"/></svg>' },
+  { name: { da: 'Trykmåler (digital)', en: 'Pressure transducer (digital)' }, svg: '<svg viewBox="0 0 100 100"><rect x="15" y="25" width="70" height="50" class="symbol-svg"/><line x1="50" y1="75" x2="50" y2="90" class="symbol-svg"/><text x="50" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="14" fill="#1a1a1a">P</text></svg>' },
+  { name: { da: 'Køler', en: 'Cooler / heat exchanger' }, svg: '<svg viewBox="0 0 100 100"><polygon points="20,30 80,30 50,70 20,30" class="symbol-svg"/><line x1="35" y1="50" x2="65" y2="50" class="symbol-svg"/><line x1="50" y1="40" x2="50" y2="60" class="symbol-svg"/></svg>' },
+];
+
+const T = {
+  da: {
+    excellent: '🎉 Fremragende!', good: '👍 Godt klaret', tryAgain: 'Bliv ved',
+    resultExc: (c, t, pct) => `${c} ud af ${t} rigtige (${pct}%). Du kender symbolerne godt.`,
+    resultGood: (c, t, pct) => `${c} ud af ${t} rigtige (${pct}%). Lidt mere træning og du er der!`,
+    resultBad: (c, t, pct) => `${c} ud af ${t} rigtige (${pct}%). Gennemgå modulerne og prøv igen.`,
+  },
+  en: {
+    excellent: '🎉 Excellent!', good: '👍 Well done', tryAgain: 'Keep at it',
+    resultExc: (c, t, pct) => `${c} out of ${t} correct (${pct}%). You know the symbols well.`,
+    resultGood: (c, t, pct) => `${c} out of ${t} correct (${pct}%). A bit more practice and you're there!`,
+    resultBad: (c, t, pct) => `${c} out of ${t} correct (${pct}%). Review the modules and try again.`,
+  }
+};
+
+let currentIdx = 0;
+let correct = 0;
+let wrong = 0;
+let questionOrder = [];
+let answered = false;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function startQuiz() {
+  currentIdx = 0; correct = 0; wrong = 0;
+  questionOrder = shuffle([...Array(symbols.length).keys()]).slice(0, 10);
+  document.getElementById('flashcardContainer').style.display = 'block';
+  document.getElementById('quizDone').style.display = 'none';
+  updateStats();
+  buildDots();
+  showQuestion();
+}
+window.startQuiz = startQuiz;
+
+function buildDots() {
+  const dots = document.getElementById('progressDots');
+  dots.innerHTML = '';
+  for (let i = 0; i < questionOrder.length; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    if (i === currentIdx) d.classList.add('current');
+    dots.appendChild(d);
+  }
+}
+
+function updateStats() {
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statRemaining').textContent = questionOrder.length - currentIdx;
+}
+
+function showQuestion() {
+  answered = false;
+  if (currentIdx >= questionOrder.length) { finish(); return; }
+
+  const lang = LANG();
+  const symbolIdx = questionOrder[currentIdx];
+  const symbol = symbols[symbolIdx];
+  document.getElementById('flashSvg').innerHTML = symbol.svg;
+
+  const wrong3 = shuffle(symbols.filter((_, i) => i !== symbolIdx)).slice(0, 3);
+  const options = shuffle([symbol, ...wrong3]);
+
+  const optEl = document.getElementById('options');
+  optEl.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = opt.name[lang];
+    btn.dataset.symbolId = opt.name.da; // language-independent key
+    btn.onclick = () => answer(btn, opt.name.da === symbol.name.da);
+    optEl.appendChild(btn);
+  });
+  buildDots();
+}
+
+function answer(btn, isCorrect) {
+  if (answered) return;
+  answered = true;
+  btn.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+  if (isCorrect) {
+    correct++;
+    document.querySelectorAll('.dot')[currentIdx].classList.add('done');
+  } else {
+    wrong++;
+    document.querySelectorAll('.dot')[currentIdx].classList.add('wrong');
+    const correctSymbol = symbols[questionOrder[currentIdx]];
+    document.querySelectorAll('.answer-btn').forEach(b => {
+      if (b.dataset.symbolId === correctSymbol.name.da) b.classList.add('correct');
+    });
+  }
+  updateStats();
+
+  setTimeout(() => {
+    currentIdx++;
+    showQuestion();
+  }, 1400);
+}
+
+function finish() {
+  document.getElementById('flashcardContainer').style.display = 'none';
+  document.getElementById('quizDone').style.display = 'block';
+  const total = questionOrder.length;
+  const pct = Math.round((correct / total) * 100);
+  const titleEl = document.getElementById('doneTitle');
+  const textEl = document.getElementById('doneText');
+  const t = T[LANG()];
+  if (pct >= 80) {
+    titleEl.textContent = t.excellent;
+    textEl.textContent = t.resultExc(correct, total, pct);
+  } else if (pct >= 60) {
+    titleEl.textContent = t.good;
+    textEl.textContent = t.resultGood(correct, total, pct);
+  } else {
+    titleEl.textContent = t.tryAgain;
+    textEl.textContent = t.resultBad(correct, total, pct);
+  }
+}
+
+startQuiz();
+
+// Re-translate option labels on language switch (in the middle of a quiz)
+if (window.HydraulikI18n && window.HydraulikI18n.onChange) {
+  window.HydraulikI18n.onChange(() => {
+    const lang = LANG();
+    document.querySelectorAll('.answer-btn').forEach(btn => {
+      const id = btn.dataset.symbolId;
+      const sym = symbols.find(s => s.name.da === id);
+      if (sym) btn.textContent = sym.name[lang];
+    });
+    // If we're already in the finish screen, refresh the localized result
+    if (document.getElementById('quizDone').style.display !== 'none') finish();
+  });
+}
+</script>
+</body>
+</html>
